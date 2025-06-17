@@ -8,7 +8,7 @@
   Для изменения версии и даты обновления:
   - Измените значения переменных botVersion и lastUpdateDate в <script> в <head>.
 -->
-<html lang="ru">
+<html lang="ru" style="height: 100%;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,69 @@
       // !!! Вставьте сюда вашу CSV-ссылку из Google Sheets (Файл -> Опубликовать в интернете -> Встроить -> Формат: CSV) !!!
       // Пример корректной CSV-ссылки: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_YOUR_UNIQUE_ID_HERE/pub?gid=YOUR_SHEET_GID&single=true&output=csv
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv'; // Замените на свою CSV-ссылку!
+
+      // === Ссылки на проекты ===
+      const projectLinks = {
+          actionGames: {
+              stress18: 'https://telegra.ph/Proekt-Stress-06-16', // Проект стресс 18+
+              lastOfUs18: 'https://telegra.ph/The-Last-of-Us-06-16-2', // The last of us 18+
+              alkatras18: 'https://telegra.ph/Pryatki-v-Alkatrase-06-16', // Прятки в Алькатрасе 18+
+          },
+          immersive: {
+              suspicion14: 'https://telegra.ph/Podozrenie-padaet-na-05-23', // Подозрение падает на 14+
+              familyVow16: 'https://telegra.ph/Semejnyj-obet-05-23', // Семейный обет 16+
+              will18: '', // Завещание 18+ (Ссылка не предоставлена)
+              insaneParanoid16: 'https://telegra.ph/Insane-Paranoid-06-16', // Insane Paranoid 16+
+              whoHid12: 'https://telegra.ph/Kto-ne-spryatalsya-06-16', // Кто не спрятался 12+
+          },
+          escape: {
+              moreDifficult: {
+                  foris16: 'https://telegra.ph/Obekt-Foris-06-16',  // Объект форис 16+
+                  arthur14: 'https://telegra.ph/Mech-korolya-Artura-06-16-2', // Меч короля Артура 14+(10+)
+                  tenLittleIndians14: 'https://telegra.ph/Desyat-negrityat-06-16', // 10 негритят 14+
+                  airCaptivity14: 'https://telegra.ph/Vozdushnyj-plen-06-16', // Воздушный плен 14+(10+)
+                  inheritance14: 'https://telegra.ph/Vkus-nasledstva-06-16', // Вкус наследства 14+(11+)
+              },
+              lessDifficult: {
+                  backToUSSR14: 'https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16', // Назад в СССР: перегрузка 14+(12+)
+                  byTouch14: 'https://telegra.ph/Na-oshchup-06-16', // На ощупь 14+(12+)
+                  pharaoh7riddles14: 'https://telegra.ph/7-zagadok-faraona-06-16', // 7 загадок фараона 14+(10+)
+                  deepJourney14: '', // Путешествие на глубину 14+(6+) (Ссылка не предоставлена)
+                  oblivionAvalanche14: 'https://telegra.ph/Lavina-zabveniya-06-16', // Лавина забвения 14+(8+)
+              }
+          },
+          maniac: {
+              wrongTurn16: 'https://telegra.ph/Povorot-ne-tuda-06-16', // Поворот не туда 16+
+              uninvitedGuests12: 'https://telegra.ph/Nezvanye-gosti-06-16', // Незваные гости 12+
+              fatum18: 'https://telegra.ph/Proekt-Fatum-06-16', // Проект Fatum 18+
+          },
+          mystic: {
+              slenderman16: '', // Slenderman 16+ (Ссылка не предоставлена)
+              nightmares14: 'https://telegra.ph/Nightmares-06-16', // Nightmares 14+
+              evilWithin16: 'https://telegra.ph/The-Evil-Within-06-16', // The Evil Within 16+
+              outlast16: 'https://telegra.ph/Outlast-06-16', // Outlast 16+
+              amnesia16: 'https://telegra.ph/Amnesia-06-16', // Amnesia 16+
+              fear16: 'https://telegra.ph/Fear-06-16', // Fear 16+
+              poltergeist16: 'https://telegra.ph/Poltergejst-06-16', // Полтергейст 16+
+              fnaf18: 'https://telegra.ph/Five-Nights-at-Freddys-06-16-2', // Five Nights at Freddy's 18+(12+)
+              saw16: 'https://telegra.ph/Pila-06-16', // Пила 16+
+              it16: 'https://telegra.ph/Ono-06-16', // Оно 16+
+              babadook15: 'https://telegra.ph/Babadook-06-16', // Babadook 15+(12+)
+              gloom16: 'https://telegra.ph/Mgla-06-16', // Мгла 16+(12+)
+              tarotDeathCard18: 'https://telegra.ph/Taro-karta-smerti-06-16', // Таро: карта смерти 18+(16+)
+              gravediggers14: 'https://telegra.ph/Iskateli-mogil-06-16', // Искатели могил 14+
+          },
+          mixed: {
+              aven14: 'https://telegra.ph/Lechebnica-sv-Avena-06-16', // Авен 14+
+              rage16: 'https://telegra.ph/Rage-06-16', // Rage 16+
+              momo14: 'https://telegra.ph/Momo-06-16', // Момо 14+
+              deadInside12: 'https://telegra.ph/Dead-Inside-06-16', // Dead inside 12+
+              ahs12: 'https://telegra.ph/Amerikanskaya-istoriya-uzhasov-06-16', // Американская история ужасов 12+
+              sidr12: 'https://telegra.ph/Strashnye-istorii-dlya-rasskazov-v-temnote-06-15', // СИДР 12+
+              scp14: 'https://telegra.ph/SCP-06-15', // Scp 14+
+              forMoney14: 'https://telegra.ph/Za-dengi---da-06-15', // За деньги - да 14+(12+)
+          }
+      };
     </script>
     <style>
         :root {
@@ -46,8 +109,10 @@
             color: var(--text-color);
             line-height: 1.6;
             min-height: 100vh;
+            height: 100%;
             position: relative;
             overflow-x: hidden;
+            background-attachment: fixed; /* Применено ко всем размерам экрана */
         }
 
         body::before {
@@ -436,6 +501,15 @@
             box-shadow: var(--card-shadow);
         }
 
+        .logo-age {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.7;
+            margin-top: 2px;
+            color: var(--text-color);
+        }
+
         /* Стили для футера */
         .footer {
             position: fixed;
@@ -551,14 +625,31 @@
     </style>
 </head>
 <body>
-    <a href="#" class="logo" onclick="showScreen('start'); return false;">Лапули</a>
+    <a href="#" class="logo" onclick="showScreen('initial-welcome'); return false;">
+        Лапули
+        <span class="logo-age">12+</span>
+    </a>
     
     <div id="app">
-        <!-- Начальный экран -->
-        <div id="start" class="screen active">
+        <!-- Новый начальный экран -->
+        <div id="initial-welcome" class="screen active">
             <div class="welcome-screen">
-                <h1 class="welcome-title">Добро пожаловать!</h1>
-                <p class="welcome-subtitle">Ваш проводник в квестовый мир</p>
+                <h1 class="welcome-title">Добро пожаловать в LapApp!</h1>
+                <p class="welcome-subtitle">Ваш проводник в мир квестов! Здесь вы найдете информацию о квестах, сможете посмотреть свои лапабаллы и многое другое.<br/>Чтобы посмотреть свои лапабаллы, перейдите в раздел "Интерактив".</p>
+                <div class="main-menu">
+                    <button class="button" onclick="showScreen('start')">
+                        <span class="emoji">🚀</span>
+                        Начать
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Начальный экран (теперь главное меню) -->
+        <div id="start" class="screen">
+            <div class="welcome-screen">
+                <h1 class="welcome-title">Главное меню</h1>
+                <p class="welcome-subtitle">Выберите интересующий раздел</p>
                 <div class="main-menu">
                     <button class="button" onclick="showScreen('project-selection')">
                         <span class="emoji">🎯</span>
@@ -615,20 +706,20 @@
         <!-- Экшен игры -->
         <div id="action-games" class="screen">
             <div class="text-content">Да, их совсем немного!<br/>Если вам нравится экшен, есть возможность посетить версии других проектов, но в данном жанре:</div>
-            <button class="button" onclick="window.open('LINK1', '_blank')">Проект стресс 18+</button>
-            <button class="button" onclick="window.open('LINK2', '_blank')">The last of us 18+</button>
-            <button class="button" onclick="window.open('LINK3', '_blank')">Прятки в Алькатрасе 18+</button>
+            <button class="button" onclick="window.open(projectLinks.actionGames.stress18, '_blank')">Проект стресс 18+</button>
+            <button class="button" onclick="window.open(projectLinks.actionGames.lastOfUs18, '_blank')">The last of us 18+</button>
+            <button class="button" onclick="window.open(projectLinks.actionGames.alkatras18, '_blank')">Прятки в Алькатрасе 18+</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Иммерсивные проекты -->
         <div id="immersive" class="screen">
             <div class="text-content">Хороших иммерсивных проектов, к сожалению, также мало. И найти альтернативные версии в данном жанре будет значительно труднее</div>
-            <button class="button" onclick="window.open('LINK4', '_blank')">Подозрение падает на 14+</button>
-            <button class="button" onclick="window.open('LINK5', '_blank')">Семейный обет 16+</button>
-            <button class="button" onclick="window.open('LINK6', '_blank')">Завещание 18+</button>
-            <button class="button" onclick="window.open('LINK7', '_blank')">Insane Paranoid 16+</button>
-            <button class="button" onclick="window.open('LINK8', '_blank')">Кто не спрятался 12+</button>
+            <button class="button" onclick="window.open(projectLinks.immersive.suspicion14, '_blank')">Подозрение падает на 14+</button>
+            <button class="button" onclick="window.open(projectLinks.immersive.familyVow16, '_blank')">Семейный обет 16+</button>
+            <button class="button" onclick="window.open(projectLinks.immersive.will18, '_blank')">Завещание 18+</button>
+            <button class="button" onclick="window.open(projectLinks.immersive.insaneParanoid16, '_blank')">Insane Paranoid 16+</button>
+            <button class="button" onclick="window.open(projectLinks.immersive.whoHid12, '_blank')">Кто не спрятался 12+</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
@@ -643,65 +734,65 @@
         <!-- Более сложные эскейпы -->
         <div id="more-difficult" class="screen">
             <div class="text-content">Более сложные эскейпы:</div>
-            <button class="button" onclick="window.open('LINK9', '_blank')">Объект форис 16+</button>
-            <button class="button" onclick="window.open('LINK10', '_blank')">Меч короля Артура 14+(10+)</button>
-            <button class="button" onclick="window.open('LINK11', '_blank')">10 негритят 14+</button>
-            <button class="button" onclick="window.open('LINK12', '_blank')">Воздушный плен 14+(10+)</button>
-            <button class="button" onclick="window.open('LINK13', '_blank')">Вкус наследства 14+(11+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.moreDifficult.foris16, '_blank')">Объект форис 16+</button>
+            <button class="button" onclick="window.open(projectLinks.escape.moreDifficult.arthur14, '_blank')">Меч короля Артура 14+(10+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.moreDifficult.tenLittleIndians14, '_blank')">10 негритят 14+</button>
+            <button class="button" onclick="window.open(projectLinks.escape.moreDifficult.airCaptivity14, '_blank')">Воздушный плен 14+(10+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.moreDifficult.inheritance14, '_blank')">Вкус наследства 14+(11+)</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Менее сложные эскейпы -->
         <div id="less-difficult" class="screen">
             <div class="text-content">Менее сложные эскейпы:</div>
-            <button class="button" onclick="window.open('LINK14', '_blank')">Назад в СССР: перегрузка 14+(12+)</button>
-            <button class="button" onclick="window.open('LINK15', '_blank')">На ощупь 14+(12+)</button>
-            <button class="button" onclick="window.open('LINK16', '_blank')">7 загадок фараона 14+(10+)</button>
-            <button class="button" onclick="window.open('LINK17', '_blank')">Путешествие на глубину 14+(6+)</button>
-            <button class="button" onclick="window.open('LINK18', '_blank')">Лавина забвения 14+(8+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.backToUSSR14, '_blank')">Назад в СССР: перегрузка 14+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.byTouch14, '_blank')">На ощупь 14+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.pharaoh7riddles14, '_blank')">7 загадок фараона 14+(10+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.deepJourney14, '_blank')">Путешествие на глубину 14+(6+)</button>
+            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.oblivionAvalanche14, '_blank')">Лавина забвения 14+(8+)</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Маньячки -->
         <div id="maniac" class="screen">
             <div class="text-content">С ними, к сожалению, тоже беда. При желании есть возможность пройти альтернативные маньячные версии на других проектах (Дед инсайд, мгла и сидр как пример)</div>
-            <button class="button" onclick="window.open('LINK19', '_blank')">Поворот не туда 16+</button>
-            <button class="button" onclick="window.open('LINK20', '_blank')">Незваные гости 12+</button>
-            <button class="button" onclick="window.open('LINK21', '_blank')">Проект Fatum 18+</button>
+            <button class="button" onclick="window.open(projectLinks.maniac.wrongTurn16, '_blank')">Поворот не туда 16+</button>
+            <button class="button" onclick="window.open(projectLinks.maniac.uninvitedGuests12, '_blank')">Незваные гости 12+</button>
+            <button class="button" onclick="window.open(projectLinks.maniac.fatum18, '_blank')">Проект Fatum 18+</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Мистика -->
         <div id="mystic" class="screen">
             <div class="text-content">Проектов этого жанра огромное количество, на вкус и цвет</div>
-            <button class="button" onclick="window.open('LINK22', '_blank')">Slenderman 16+</button>
-            <button class="button" onclick="window.open('LINK23', '_blank')">Nightmares 14+</button>
-            <button class="button" onclick="window.open('LINK24', '_blank')">The Evil Within 16+</button>
-            <button class="button" onclick="window.open('LINK25', '_blank')">Outlast 16+</button>
-            <button class="button" onclick="window.open('LINK26', '_blank')">Amnesia 16+</button>
-            <button class="button" onclick="window.open('LINK27', '_blank')">Fear 16+</button>
-            <button class="button" onclick="window.open('LINK28', '_blank')">Полтергейст 16+</button>
-            <button class="button" onclick="window.open('LINK29', '_blank')">Five Nights at Freddy's 18+(12+)</button>
-            <button class="button" onclick="window.open('LINK30', '_blank')">Пила 16+</button>
-            <button class="button" onclick="window.open('LINK31', '_blank')">Оно 16+</button>
-            <button class="button" onclick="window.open('LINK32', '_blank')">Babadook 15+(12+)</button>
-            <button class="button" onclick="window.open('LINK33', '_blank')">Мгла 16+(12+)</button>
-            <button class="button" onclick="window.open('LINK34', '_blank')">Таро: карта смерти 18+(16+)</button>
-            <button class="button" onclick="window.open('LINK35', '_blank')">Искатели могил 14+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.slenderman16, '_blank')">Slenderman 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.nightmares14, '_blank')">Nightmares 14+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.evilWithin16, '_blank')">The Evil Within 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.outlast16, '_blank')">Outlast 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.amnesia16, '_blank')">Amnesia 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.fear16, '_blank')">Fear 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.poltergeist16, '_blank')">Полтергейст 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.fnaf18, '_blank')">Five Nights at Freddy's 18+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.saw16, '_blank')">Пила 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.it16, '_blank')">Оно 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.babadook15, '_blank')">Babadook 15+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.gloom16, '_blank')">Мгла 16+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.tarotDeathCard18, '_blank')">Таро: карта смерти 18+(16+)</button>
+            <button class="button" onclick="window.open(projectLinks.mystic.gravediggers14, '_blank')">Искатели могил 14+</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Смеси -->
         <div id="mixed" class="screen">
             <div class="text-content">Смеси включают в себя как элементы мистики, так и маньячки! Возможно наличие экшен-части</div>
-            <button class="button" onclick="window.open('LINK36', '_blank')">Авен 14+</button>
-            <button class="button" onclick="window.open('LINK37', '_blank')">Rage 16+</button>
-            <button class="button" onclick="window.open('LINK38', '_blank')">Момо 14+</button>
-            <button class="button" onclick="window.open('LINK39', '_blank')">Dead inside 12+</button>
-            <button class="button" onclick="window.open('LINK40', '_blank')">Американская история ужасов 12+</button>
-            <button class="button" onclick="window.open('LINK41', '_blank')">СИДР 12+</button>
-            <button class="button" onclick="window.open('LINK42', '_blank')">Scp 14+</button>
-            <button class="button" onclick="window.open('LINK43', '_blank')">За деньги - да 14+(12+)</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.aven14, '_blank')">Авен 14+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.rage16, '_blank')">Rage 16+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.momo14, '_blank')">Момо 14+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.deadInside12, '_blank')">Dead inside 12+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.ahs12, '_blank')">Американская история ужасов 12+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.sidr12, '_blank')">СИДР 12+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.scp14, '_blank')">Scp 14+</button>
+            <button class="button" onclick="window.open(projectLinks.mixed.forMoney14, '_blank')">За деньги - да 14+(12+)</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
@@ -985,12 +1076,74 @@
         <div id="support" class="screen">
             <div class="text-content">Bot by <a href="https://t.me/lapuliquest" target="_blank">https://t.me/lapuliquest</a><br/><br/>Idea @j_S_T_R, @makcgrechenkov<br/>Code @svedushev</div>
             <button class="button" onclick="showScreen('bot-issues')"><span class="emoji">⚠️</span>В боте что-то не работает</button>
+            <button class="button" onclick="showScreen('user-agreement')"><span class="emoji">📄</span>Пользовательское соглашение</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- В боте что-то не работает -->
         <div id="bot-issues" class="screen">
             <div class="text-content">Если у вас возникли проблемы с ботом, пожалуйста, напишите нам в поддержку: <a href="https://t.me/lapuly_quest" target="_blank">@lapuly_quest</a></div>
+            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+        </div>
+
+        <!-- Пользовательское соглашение -->
+        <div id="user-agreement" class="screen">
+            <div class="text-content">
+                <h2>Пользовательское соглашение Telegram-мини-приложения LapApp</h2>
+
+                <p><b>Дата последнего обновления:</b> 17 июня 2025 г.</p>
+
+                <p>Настоящее Пользовательское соглашение (далее — «Соглашение») определяет условия использования Telegram-мини-приложения LapApp (далее — «Приложение»), созданного физическим лицом (далее — «Владелец»), и представляет собой юридически обязательное соглашение между Владельцем и любым пользователем Приложения (далее — «Пользователь»).</p>
+
+                <h3>1. Описание Приложения</h3>
+                <p>Приложение предназначено для помощи новичкам и опытным игрокам в квест-индустрии. Оно реализовано как Telegram-мини-приложение и связано с телеграм-каналом, посвящённым квестам. В частности, приложение отображает рейтинг игроков по количеству так называемых «лапабаллов» (внутренних баллов активности), помогает отслеживать активность участников и вовлекает в игровой процесс.</p>
+
+                <h3>2. Условия использования</h3>
+                <ul>
+                    <li>Использование Приложения допускается с 12 лет и старше.</li>
+                    <li>Приложение предназначено только для личного, некоммерческого использования.</li>
+                    <li>Пользователь соглашается с тем, что использование Приложения осуществляется добровольно и «как есть».</li>
+                </ul>
+
+                <h3>3. Сбор и обработка данных</h3>
+                <p>Приложение собирает и обрабатывает минимальный объём персональных данных, строго необходимый для функционирования:</p>
+                <ul>
+                    <li>Telegram-юзернейм (если он есть)</li>
+                    <li>Количество набранных лапабаллов (внутренние игровые очки)</li>
+                </ul>
+                <p>Эти данные не передаются третьим лицам, не продаются, не публикуются публично и используются исключительно для отображения рейтинга в рамках Приложения.</p>
+                <p>Данные хранятся в Google Таблицах, к которым имеет доступ только Владелец.</p>
+
+                <h3>4. Интеграции</h3>
+                <p>Приложение использует:</p>
+                <ul>
+                    <li>Google Таблицы — для хранения игровой информации.</li>
+                    <li>Потенциальную интеграцию с платформой «Мир Квестов» (если такая появится в будущем).</li>
+                </ul>
+
+                <h3>5. Ограничение ответственности</h3>
+                <ul>
+                    <li>Владелец не несёт ответственности за сбои в работе Telegram или сторонних сервисов (Google и др.).</li>
+                    <li>Владелец не гарантирует непрерывную или безошибочную работу Приложения.</li>
+                    <li>Пользователь самостоятельно несёт ответственность за использование Приложения в соответствии с законами своей страны.</li>
+                </ul>
+
+                <h3>6. Интеллектуальная собственность</h3>
+                <p>Все тексты, логика работы и структура Приложения являются интеллектуальной собственностью Владельца. Запрещается копировать, воспроизводить или использовать элементы Приложения без письменного разрешения Владельца.</p>
+
+                <h3>7. Заключительные положения</h3>
+                <ul>
+                    <li>Владелец оставляет за собой право изменять настоящее Соглашение в любое время. Актуальная версия будет доступна по ссылке внутри Приложения или на официальной странице.</li>
+                    <li>Продолжая использование Приложения, Пользователь автоматически соглашается с новой версией Соглашения.</li>
+                </ul>
+
+                <h3>Связь с владельцем</h3>
+                <p>По всем вопросам, касающимся использования Приложения или настоящего Соглашения, Пользователь может обращаться к Владельцу по следующим контактным данным:</p>
+                <ul>
+                    <li>Владелец: физическое лицо, зарегистрированное в г. Москва, Россия.</li>
+                    <li>Контакт в Telegram: <a href="https://t.me/lapuly_quest" target="_blank">@lapuly_quest</a></li>
+                </ul>
+            </div>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
     </div>
@@ -1002,8 +1155,8 @@
 
     <script>
         let tg = window.Telegram.WebApp;
-        let history = ['start'];
-        let lastScrollTop = 0;
+        let history = ['initial-welcome'];
+        // let lastScrollTop = 0; // УДАЛЕНО
         
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
@@ -1034,14 +1187,14 @@
             const footer = document.querySelector('.footer');
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            // Показываем футер только если прокрутили вниз
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
+            // Показываем футер, если прокрутка не на самом верху, иначе скрываем
+            if (scrollTop > 0) {
                 footer.classList.add('visible');
             } else {
                 footer.classList.remove('visible');
             }
             
-            lastScrollTop = scrollTop;
+            // lastScrollTop = scrollTop; // УДАЛЕНО: больше не нужно для этой логики
         }
 
         // Добавляем обработчик прокрутки
@@ -1050,6 +1203,7 @@
         // Инициализация Telegram WebApp
         tg.expand();
         tg.enableClosingConfirmation();
+        showScreen('initial-welcome'); // Отображаем первый экран при загрузке
 
         // Установка версии и даты в футер
         document.getElementById('footer-version').textContent = `Версия ${botVersion} | Последнее обновление: ${lastUpdateDate}`;
