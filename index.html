@@ -32,7 +32,6 @@
           immersive: {
               suspicion14: 'https://telegra.ph/Podozrenie-padaet-na-05-23', // Подозрение падает на 14+
               familyVow16: 'https://telegra.ph/Semejnyj-obet-05-23', // Семейный обет 16+
-              will18: '', // Завещание 18+ (Ссылка не предоставлена)
               insaneParanoid16: 'https://telegra.ph/Insane-Paranoid-06-16', // Insane Paranoid 16+
               whoHid12: 'https://telegra.ph/Kto-ne-spryatalsya-06-16', // Кто не спрятался 12+
           },
@@ -48,7 +47,6 @@
                   backToUSSR14: 'https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16', // Назад в СССР: перегрузка 14+(12+)
                   byTouch14: 'https://telegra.ph/Na-oshchup-06-16', // На ощупь 14+(12+)
                   pharaoh7riddles14: 'https://telegra.ph/7-zagadok-faraona-06-16', // 7 загадок фараона 14+(10+)
-                  deepJourney14: '', // Путешествие на глубину 14+(6+) (Ссылка не предоставлена)
                   oblivionAvalanche14: 'https://telegra.ph/Lavina-zabveniya-06-16', // Лавина забвения 14+(8+)
               }
           },
@@ -58,7 +56,6 @@
               fatum18: 'https://telegra.ph/Proekt-Fatum-06-16', // Проект Fatum 18+
           },
           mystic: {
-              slenderman16: '', // Slenderman 16+ (Ссылка не предоставлена)
               nightmares14: 'https://telegra.ph/Nightmares-06-16', // Nightmares 14+
               evilWithin16: 'https://telegra.ph/The-Evil-Within-06-16', // The Evil Within 16+
               outlast16: 'https://telegra.ph/Outlast-06-16', // Outlast 16+
@@ -494,6 +491,11 @@
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(8px);
             transition: var(--transition);
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        .logo.visible { /* Новый класс для видимости */
+            display: block;
         }
 
         .logo:hover {
@@ -512,8 +514,8 @@
 
         /* Стили для футера */
         .footer {
-            position: fixed;
-            bottom: -100px; /* Начальное положение за пределами экрана */
+            /* position: fixed; */ /* УДАЛЕНО */
+            /* bottom: -100px; */ /* УДАЛЕНО */
             left: 0;
             right: 0;
             background: var(--glass-bg);
@@ -524,11 +526,16 @@
             border-top: 1px solid var(--glass-border);
             backdrop-filter: blur(8px);
             z-index: 1000;
-            transition: transform 0.3s ease-in-out;
+            /* transition: transform 0.3s ease-in-out; */ /* УДАЛЕНО */
+            opacity: 0; /* Скрыто по умолчанию */
+            transition: opacity 0.3s ease-in-out; /* Анимация появления/исчезновения */
+            pointer-events: none; /* Не реагирует на события, когда скрыт */
         }
 
         .footer.visible {
-            transform: translateY(-100px); /* Показываем футер */
+            opacity: 1; /* Показываем футер */
+            pointer-events: auto; /* Реагирует на события, когда виден */
+            /* transform: translateY(-100px); */ /* УДАЛЕНО */
         }
 
         .footer p {
@@ -538,7 +545,7 @@
         /* Обновляем стили для основного контента */
         #app {
             padding-top: 80px;
-            padding-bottom: 100px;
+            padding-bottom: 100px; /* Оставим, чтобы дать место для футера, если он будет внизу */
         }
 
         /* Обновляем стили для начального экрана */
@@ -717,7 +724,6 @@
             <div class="text-content">Хороших иммерсивных проектов, к сожалению, также мало. И найти альтернативные версии в данном жанре будет значительно труднее</div>
             <button class="button" onclick="window.open(projectLinks.immersive.suspicion14, '_blank')">Подозрение падает на 14+</button>
             <button class="button" onclick="window.open(projectLinks.immersive.familyVow16, '_blank')">Семейный обет 16+</button>
-            <button class="button" onclick="window.open(projectLinks.immersive.will18, '_blank')">Завещание 18+</button>
             <button class="button" onclick="window.open(projectLinks.immersive.insaneParanoid16, '_blank')">Insane Paranoid 16+</button>
             <button class="button" onclick="window.open(projectLinks.immersive.whoHid12, '_blank')">Кто не спрятался 12+</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
@@ -748,7 +754,6 @@
             <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.backToUSSR14, '_blank')">Назад в СССР: перегрузка 14+(12+)</button>
             <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.byTouch14, '_blank')">На ощупь 14+(12+)</button>
             <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.pharaoh7riddles14, '_blank')">7 загадок фараона 14+(10+)</button>
-            <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.deepJourney14, '_blank')">Путешествие на глубину 14+(6+)</button>
             <button class="button" onclick="window.open(projectLinks.escape.lessDifficult.oblivionAvalanche14, '_blank')">Лавина забвения 14+(8+)</button>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
@@ -765,7 +770,6 @@
         <!-- Мистика -->
         <div id="mystic" class="screen">
             <div class="text-content">Проектов этого жанра огромное количество, на вкус и цвет</div>
-            <button class="button" onclick="window.open(projectLinks.mystic.slenderman16, '_blank')">Slenderman 16+</button>
             <button class="button" onclick="window.open(projectLinks.mystic.nightmares14, '_blank')">Nightmares 14+</button>
             <button class="button" onclick="window.open(projectLinks.mystic.evilWithin16, '_blank')">The Evil Within 16+</button>
             <button class="button" onclick="window.open(projectLinks.mystic.outlast16, '_blank')">Outlast 16+</button>
@@ -1166,6 +1170,13 @@
             targetScreen.classList.add('active');
             history.push(screenId);
 
+            const logo = document.querySelector('.logo');
+            if (screenId === 'initial-welcome') {
+                logo.classList.add('visible');
+            } else {
+                logo.classList.remove('visible');
+            }
+
             if (screenId === 'google-sheets') {
                 loadLapabalts(); // Загружаем данные при активации экрана Google таблиц
             }
@@ -1186,15 +1197,15 @@
         function handleScroll() {
             const footer = document.querySelector('.footer');
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
             
-            // Показываем футер, если прокрутка не на самом верху, иначе скрываем
-            if (scrollTop > 0) {
+            // Показываем футер только если прокрутили до самого низа
+            if (scrollTop + clientHeight >= scrollHeight - 5) { // Добавим небольшой допуск 5px для точности
                 footer.classList.add('visible');
             } else {
                 footer.classList.remove('visible');
             }
-            
-            // lastScrollTop = scrollTop; // УДАЛЕНО: больше не нужно для этой логики
         }
 
         // Добавляем обработчик прокрутки
