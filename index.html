@@ -14,15 +14,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LapApp</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script async
+        src="https://telegram.org/js/telegram-widget.js?15"
+        data-telegram-login="lapabot_bot"
+        data-size="large"
+        data-userpic="false"
+        data-request-access="write"
+        data-onauth="onTelegramAuth(user)"
+    ></script>
     <script>
       // === Настройки приложения ===
       const botVersion = '1.0.0';
       const lastUpdateDate = '15.03.2024';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       
-      // === Настройки админ-панели ===
-      const adminIds = [5014279740]; // Ваш Telegram ID
-      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbz4nif5Toh064H0vhVayQpiqPoKaL1VURoWBe4Zxj19JOqTpWoGxknTKGYCyAYhe-lg2A/exec';
       const botUsername = 'lapabot_bot'; // Имя вашего бота
 
       // === Ссылки на проекты ===
@@ -633,70 +638,6 @@
             border-bottom: none;
         }
 
-        /* Стили для админ-панели */
-        #admin-panel {
-            background: var(--glass-bg);
-            padding: 30px;
-            border-radius: 25px;
-            margin: 20px 0;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--card-shadow);
-            backdrop-filter: blur(8px);
-        }
-
-        #admin-panel h2 {
-            color: var(--accent-color);
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        #admin-panel h3 {
-            color: var(--accent-color);
-            margin: 20px 0 15px 0;
-            font-size: 18px;
-        }
-
-        .admin-form {
-            margin: 20px 0;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .admin-form input,
-        .admin-form textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        .admin-form textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .admin-form button {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .admin-form button:hover {
-            background: #e55a9b;
-            transform: translateY(-2px);
-        }
-
         /* Стили для Telegram Login */
         #telegram-login-container {
             text-align: center;
@@ -716,33 +657,6 @@
         .white-bg::before {
             display: none !important;
         }
-
-        /* Стили для новостей */
-        .news-item {
-            background: var(--glass-bg);
-            padding: 25px;
-            border-radius: 20px;
-            margin: 20px 0;
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--card-shadow);
-            backdrop-filter: blur(8px);
-        }
-
-        .news-author {
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-        }
-
-        .news-date {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 15px;
-        }
-
-        .news-text {
-            line-height: 1.6;
-        }
     </style>
 </head>
 <body>
@@ -757,24 +671,6 @@
             data-request-access="write"
             data-onauth="onTelegramAuth(user)"
         ></script>
-    </div>
-
-    <!-- Админ-панель -->
-    <div id="admin-panel" style="display: none;">
-        <h2>🔧 Админ-панель</h2>
-        
-        <div class="admin-form">
-            <h3>📊 Изменить лапабаллы</h3>
-            <input type="text" id="admin-username" placeholder="Telegram username (без @)">
-            <input type="number" id="admin-lapabalts" placeholder="Новое количество баллов">
-            <button onclick="updateLapabalts()">💾 Сохранить</button>
-        </div>
-        
-        <div class="admin-form">
-            <h3>📢 Создать новость</h3>
-            <textarea id="admin-news-text" placeholder="Текст новости..."></textarea>
-            <button onclick="createNews()">📤 Опубликовать</button>
-        </div>
     </div>
 
     <a href="#" class="logo" onclick="showScreen('initial-welcome'); return false;">
@@ -818,10 +714,6 @@
                     <button class="button" onclick="showScreen('interactive')">
                         <span class="emoji">🎮</span>
                         Интерактив
-                    </button>
-                    <button class="button" onclick="showScreen('news')">
-                        <span class="emoji">📰</span>
-                        Новости
                     </button>
                     <button class="button" onclick="showScreen('support')">
                         <span class="emoji">🛠️</span>
@@ -1214,19 +1106,6 @@
             <button class="button back-button" onclick="goBack()">Назад</button>
         </div>
 
-        <!-- Новости -->
-        <div id="news" class="screen">
-            <div class="text-content">
-                <h2>📰 Новости</h2>
-                <div id="news-container">
-                    <p>Загрузка новостей...</p>
-                </div>
-            </div>
-            <button class="button back-button" onclick="goBack()">
-                <span class="emoji">⬅️</span>Назад
-            </button>
-        </div>
-
         <!-- Google таблицы -->
         <div id="google-sheets" class="screen">
             <div class="text-content">
@@ -1329,7 +1208,7 @@
             'project-selection', 'action-games', 'immersive', 'escape', 'more-difficult', 'less-difficult', 'maniac', 'mystic', 'mixed',
             'basic-info', 'difficulty-level', 'age-restrictions', 'players-count', 'time-passing', 'quest-theme', 'genres', 'main-categories', 'additional-categories', 'quest-history',
             'advanced-info', 'first-quest', 'booking', 'special-versions', 'tgk-communities', 'team-search',
-            'interactive', 'google-sheets', 'support', 'bot-issues', 'user-agreement', 'news'
+            'interactive', 'google-sheets', 'support', 'bot-issues', 'user-agreement'
         ];
         
         function showScreen(screenId) {
@@ -1357,10 +1236,6 @@
             if (screenId === 'google-sheets') {
                 loadLapabalts();
             }
-            
-            if (screenId === 'news') {
-                loadNews();
-            }
         }
 
         function goBack() {
@@ -1386,124 +1261,8 @@
             currentUser = user;
             document.getElementById('telegram-login-container').style.display = 'none';
             
-            if (adminIds.includes(user.id)) {
-                showAdminPanel();
-            } else {
-                hideAdminPanel();
-            }
-            
             // Показываем приложение после авторизации
             showScreen('initial-welcome');
-        }
-
-        function showAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'block';
-        }
-
-        function hideAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'none';
-        }
-
-        // Админские функции
-        function updateLapabalts() {
-            const username = document.getElementById('admin-username').value;
-            const value = document.getElementById('admin-lapabalts').value;
-            
-            if (!username || !value) {
-                alert('Заполните все поля!');
-                return;
-            }
-            
-            const formData = new URLSearchParams();
-            formData.append('action', 'update_lapabalts');
-            formData.append('username', username);
-            formData.append('lapabalts', value);
-            
-            fetch(googleScriptUrl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === 'ok') {
-                    alert('Лапабаллы обновлены!');
-                    document.getElementById('admin-username').value = '';
-                    document.getElementById('admin-lapabalts').value = '';
-                } else {
-                    alert('Ошибка при обновлении!');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при обновлении!');
-            });
-        }
-
-        function createNews() {
-            const text = document.getElementById('admin-news-text').value;
-            
-            if (!text.trim()) {
-                alert('Введите текст новости!');
-                return;
-            }
-            
-            const formData = new URLSearchParams();
-            formData.append('action', 'create_news');
-            formData.append('author', currentUser.first_name || currentUser.username || 'Админ');
-            formData.append('text', text);
-            
-            fetch(googleScriptUrl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === 'ok') {
-                    alert('Новость опубликована!');
-                    document.getElementById('admin-news-text').value = '';
-                } else {
-                    alert('Ошибка при публикации!');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Ошибка при публикации!');
-            });
-        }
-
-        // Загрузка новостей
-        async function loadNews() {
-            const newsContainer = document.getElementById('news-container');
-            newsContainer.innerHTML = '<p>Загрузка новостей...</p>';
-
-            try {
-                const response = await fetch(`${googleScriptUrl}?action=get_news`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const news = await response.json();
-                
-                if (news.length === 0) {
-                    newsContainer.innerHTML = '<p>Новостей пока нет.</p>';
-                    return;
-                }
-
-                newsContainer.innerHTML = '';
-                news.forEach(item => {
-                    const date = new Date(item.date).toLocaleDateString('ru-RU');
-                    newsContainer.innerHTML += `
-                        <div class="news-item">
-                            <div class="news-author">👤 ${item.author}</div>
-                            <div class="news-date">📅 ${date}</div>
-                            <div class="news-text">${item.text}</div>
-                        </div>
-                    `;
-                });
-
-            } catch (error) {
-                console.error('Ошибка загрузки новостей:', error);
-                newsContainer.innerHTML = '<p>Не удалось загрузить новости.</p>';
-            }
         }
 
         // Функция для обработки прокрутки
