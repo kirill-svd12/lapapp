@@ -14,21 +14,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LapApp</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script async
-        src="https://telegram.org/js/telegram-widget.js?15"
-        data-telegram-login="lapabot_bot"
-        data-size="large"
-        data-userpic="false"
-        data-request-access="write"
-        data-onauth="onTelegramAuth(user)"
-    ></script>
     <script>
       // === Настройки приложения ===
       const botVersion = '1.0.0';
       const lastUpdateDate = '15.03.2024';
-      // !!! Вставьте сюда вашу CSV-ссылку из Google Sheets (Файл -> Опубликовать в интернете -> Встроить -> Формат: CSV) !!!
-      // Пример корректной CSV-ссылки: https://docs.google.com/spreadsheets/d/e/2PACX-1vR_YOUR_UNIQUE_ID_HERE/pub?gid=YOUR_SHEET_GID&single=true&output=csv
-      const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv'; // Замените на свою CSV-ссылку!
+      const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       
       // === Настройки админ-панели ===
       const adminIds = [5014279740]; // Ваш Telegram ID
