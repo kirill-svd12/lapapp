@@ -24,10 +24,11 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.0.5';
-      const lastUpdateDate = '15.03.2024';
+      const botVersion = '1.0.6';
+      const lastUpdateDate = '20.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
-      
+      const adminIds = [5014279740]; // Ваш Telegram ID
+      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbz4nif5Toh064H0vhVayQpiqPoKaL1VURoWBe4Zxj19JOqTpWoGxknTKGYCyAYhe-lg2A/exec';
       const botUsername = 'lapabot_bot'; // Имя вашего бота
 
       // === Ссылки на проекты ===
@@ -766,6 +767,30 @@
                 transform: translateY(0) scale(1);
             }
         }
+
+        /* Стили для новостей */
+        .news-item {
+            background: var(--glass-bg);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(8px);
+        }
+        .news-author {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+        .news-date {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        .news-text {
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -833,9 +858,17 @@
                         <span class="emoji">🎮</span>
                         Интерактив
                     </button>
+                    <button class="button" onclick="showScreen('news')">
+                        <span class="emoji">📰</span>
+                        Новости
+                    </button>
                     <button class="button" onclick="showGptPrompts()">
                         <span class="emoji">🤖</span>
                         Тематические промты для GPT
+                    </button>
+                    <button class="button" id="admin-menu-btn" style="display:none" onclick="openAdminPanel()">
+                        <span class="emoji">🛡️</span>
+                        Админ-панель
                     </button>
                     <button class="button" onclick="showScreen('support')">
                         <span class="emoji">🛠️</span>
@@ -1464,11 +1497,41 @@ Quest, only about quests тг (проходит набор раз в перио�
             </div>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
+
+        <!-- Новости -->
+        <div id="news" class="screen">
+            <div class="text-content">
+                <h2>📰 Новости</h2>
+                <div id="news-container">
+                    <p>Загрузка новостей...</p>
+                </div>
+            </div>
+            <button class="button back-button" onclick="goBack()">
+                <span class="emoji">⬅️</span>Назад
+            </button>
+        </div>
     </div>
 
     <div class="footer">
         <p id="footer-version"></p>
         <p>© 2024-2025 Лапули. Все права защищены.</p>
+    </div>
+
+    <!-- Админ-панель (скрыта по умолчанию) -->
+    <div id="admin-panel" style="display: none;">
+        <h2>🔧 Админ-панель</h2>
+        <div class="admin-form">
+            <h3>📊 Изменить лапабаллы</h3>
+            <input type="text" id="admin-username" placeholder="Telegram username (без @)">
+            <input type="number" id="admin-lapabalts" placeholder="Новое количество баллов">
+            <button onclick="updateLapabalts()">💾 Сохранить</button>
+        </div>
+        <div class="admin-form">
+            <h3>📢 Создать новость</h3>
+            <textarea id="admin-news-text" placeholder="Текст новости..."></textarea>
+            <button onclick="createNews()">📤 Опубликовать</button>
+        </div>
+        <button class="button back-button" onclick="closeAdminPanel()"><span class="emoji">⬅️</span>Закрыть</button>
     </div>
 
     <script>
@@ -1481,7 +1544,7 @@ Quest, only about quests тг (проходит набор раз в перио�
             'project-selection', 'action-games', 'immersive', 'escape', 'more-difficult', 'less-difficult', 'maniac', 'mystic', 'mixed',
             'basic-info', 'difficulty-level', 'age-restrictions', 'players-count', 'time-passing', 'quest-theme', 'genres', 'main-categories', 'additional-categories', 'quest-history',
             'advanced-info', 'first-quest', 'booking', 'aggregators', 'quest-world', 'curatorship', 'independently', 'company-sites', 'special-versions', 'special-versions-details', 'tgk-communities', 'companies', 'team-search',
-            'interactive', 'google-sheets', 'support', 'bot-issues', 'user-agreement'
+            'interactive', 'google-sheets', 'support', 'bot-issues', 'user-agreement', 'news'
         ];
         
         function showScreen(screenId) {
@@ -1509,6 +1572,9 @@ Quest, only about quests тг (проходит набор раз в перио�
             if (screenId === 'google-sheets') {
                 loadLapabalts();
             }
+            if (screenId === 'news') {
+                loadNews();
+            }
         }
 
         function goBack() {
@@ -1534,6 +1600,13 @@ Quest, only about quests тг (проходит набор раз в перио�
             currentUser = user;
             document.getElementById('telegram-login-container').style.display = 'none';
             
+            // Показываем кнопку админ-панели только для админов
+            if (adminIds.includes(user.id)) {
+                document.getElementById('admin-menu-btn').style.display = '';
+            } else {
+                document.getElementById('admin-menu-btn').style.display = 'none';
+            }
+
             // Показываем приложение после авторизации
             showScreen('initial-welcome');
         }
@@ -1618,6 +1691,107 @@ Quest, only about quests тг (проходит набор раз в перио�
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
                 dataContainer.innerHTML = '<p>Не удалось загрузить данные. Проверьте ссылку и настройки публикации таблицы.</p>';
+            }
+        }
+
+        // Открыть админ-панель
+        function openAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'block';
+        }
+        // Закрыть админ-панель
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
+        }
+
+        // Админские функции
+        function updateLapabalts() {
+            const username = document.getElementById('admin-username').value;
+            const value = document.getElementById('admin-lapabalts').value;
+            if (!username || !value) {
+                alert('Заполните все поля!');
+                return;
+            }
+            const formData = new URLSearchParams();
+            formData.append('action', 'update_lapabalts');
+            formData.append('username', username);
+            formData.append('lapabalts', value);
+            fetch(googleScriptUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 'ok') {
+                    alert('Лапабаллы обновлены!');
+                    document.getElementById('admin-username').value = '';
+                    document.getElementById('admin-lapabalts').value = '';
+                } else {
+                    alert('Ошибка при обновлении!');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при обновлении!');
+            });
+        }
+
+        function createNews() {
+            const text = document.getElementById('admin-news-text').value;
+            if (!text.trim()) {
+                alert('Введите текст новости!');
+                return;
+            }
+            const formData = new URLSearchParams();
+            formData.append('action', 'create_news');
+            formData.append('author', currentUser.first_name || currentUser.username || 'Админ');
+            formData.append('text', text);
+            fetch(googleScriptUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 'ok') {
+                    alert('Новость опубликована!');
+                    document.getElementById('admin-news-text').value = '';
+                } else {
+                    alert('Ошибка при публикации!');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при публикации!');
+            });
+        }
+
+        // Загрузка новостей
+        async function loadNews() {
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '<p>Загрузка новостей...</p>';
+            try {
+                const response = await fetch(`${googleScriptUrl}?action=get_news`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const news = await response.json();
+                if (news.length === 0) {
+                    newsContainer.innerHTML = '<p>Новостей пока нет.</p>';
+                    return;
+                }
+                newsContainer.innerHTML = '';
+                news.forEach(item => {
+                    const date = new Date(item.date).toLocaleDateString('ru-RU');
+                    newsContainer.innerHTML += `
+                        <div class="news-item">
+                            <div class="news-author">👤 ${item.author}</div>
+                            <div class="news-date">📅 ${date}</div>
+                            <div class="news-text">${item.text}</div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки новостей:', error);
+                newsContainer.innerHTML = '<p>Не удалось загрузить новости.</p>';
             }
         }
     </script>
