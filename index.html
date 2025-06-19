@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.0.6';
+      const botVersion = '1.0.7';
       const lastUpdateDate = '20.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -858,7 +858,7 @@
                         <span class="emoji">🎮</span>
                         Интерактив
                     </button>
-                    <button class="button" onclick="showScreen('news')">
+                    <button class="button" onclick="openNews()">
                         <span class="emoji">📰</span>
                         Новости
                     </button>
@@ -1793,6 +1793,21 @@ Quest, only about quests тг (проходит набор раз в перио�
                 console.error('Ошибка загрузки новостей:', error);
                 newsContainer.innerHTML = '<p>Не удалось загрузить новости.</p>';
             }
+        }
+
+        // Показать новости (разрешено только админам)
+        function openNews() {
+            if (currentUser && adminIds.includes(currentUser.id)) {
+                showScreen('news');
+            } else {
+                showModalSoon();
+            }
+        }
+
+        // Модальное окно "В разработке" для новостей
+        function showModalSoon() {
+            // Можно сделать красивое модальное окно, пока alert
+            alert('В разработке');
         }
     </script>
 </body>
