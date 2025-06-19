@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.0.7';
+      const botVersion = '1.0.8';
       const lastUpdateDate = '20.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -818,6 +818,16 @@
             <div class="modal-title">Coming Soon!</div>
             <div class="modal-text">Тематические промты для GPT находятся в разработке. Скоро здесь появятся полезные промты для работы с квестами!</div>
             <button class="modal-button" onclick="closeGptModal()">Понятно</button>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для новостей "В разработке" -->
+    <div class="modal-overlay" id="news-modal">
+        <div class="modal-content">
+            <div class="modal-icon">📰</div>
+            <div class="modal-title">В разработке!</div>
+            <div class="modal-text">Раздел новостей скоро появится для всех пользователей.<br>Следите за обновлениями!</div>
+            <button class="modal-button" onclick="closeNewsModal()">Понятно</button>
         </div>
     </div>
     
@@ -1806,9 +1816,19 @@ Quest, only about quests тг (проходит набор раз в перио�
 
         // Модальное окно "В разработке" для новостей
         function showModalSoon() {
-            // Можно сделать красивое модальное окно, пока alert
-            alert('В разработке');
+            document.getElementById('news-modal').style.display = 'flex';
         }
+        function closeNewsModal() {
+            document.getElementById('news-modal').style.display = 'none';
+        }
+        // Закрытие модального окна при клике вне его
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('news-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeNewsModal();
+                }
+            });
+        });
     </script>
 </body>
 </html>
