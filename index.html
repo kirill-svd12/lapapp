@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.0.9';
+      const botVersion = '1.1.0';
       const lastUpdateDate = '20.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -1014,7 +1014,7 @@
 
 📌 Вопросы - @lapuly_quest
 
-📌  Вопросы (анонимно) - https://t.me/anonimnyye_voprosy_bot?start=qwj6y
+📌  Вопросы (анонимно) - <a href="https://t.me/anonimnyye_voprosy_bot?start=qwj6y" target="_blank">https://t.me/anonimnyye_voprosy_bot?start=qwj6y</a>
 
 Выбирайте любую интересующую тему ниже!</div>
             <button class="button" onclick="showScreen('difficulty-level')">Уровень сложности</button>
@@ -1143,7 +1143,7 @@
 
 📌 Вопросы - @lapuly_quest
 
-📌  Вопросы (анонимно) - https://t.me/anonimnyye_voprosy_bot?start=qwj6y
+📌  Вопросы (анонимно) - <a href="https://t.me/anonimnyye_voprosy_bot?start=qwj6y" target="_blank">https://t.me/anonimnyye_voprosy_bot?start=qwj6y</a>
 
 Выбирайте любую интересующую тему ниже!</div>
             <button class="button" onclick="showScreen('first-quest')">Подбор первого квеста</button>
@@ -1565,12 +1565,8 @@ Quest, only about quests тг (проходит набор раз в перио�
             targetScreen.classList.add('active');
             history.push(screenId);
 
-            // Управление фоном
-            if (whiteBgScreens.includes(screenId)) {
-                document.body.classList.add('white-bg');
-            } else {
-                document.body.classList.remove('white-bg');
-            }
+            // Всегда белый фон
+            document.body.classList.add('white-bg');
 
             const logo = document.querySelector('.logo');
             if (screenId === 'initial-welcome') {
@@ -1595,13 +1591,8 @@ Quest, only about quests тг (проходит набор раз в перио�
                     screen.classList.remove('active');
                 });
                 document.getElementById(previousScreen).classList.add('active');
-                
-                // Управление фоном при возврате
-                if (whiteBgScreens.includes(previousScreen)) {
-                    document.body.classList.add('white-bg');
-                } else {
-                    document.body.classList.remove('white-bg');
-                }
+                // Всегда белый фон
+                document.body.classList.add('white-bg');
             }
         }
 
