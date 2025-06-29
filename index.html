@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.30';
+      const botVersion = '1.1.4';
       const lastUpdateDate = '25.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -997,6 +997,38 @@
             box-shadow: 0 8px 32px rgba(255,182,193,0.18);
             transition: background 0.2s, box-shadow 0.2s;
         }
+
+        .modal-soon {
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+        .modal-soon-content {
+          background: #fff;
+          border-radius: 18px;
+          padding: 32px 24px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+          font-size: 1.2em;
+          text-align: center;
+        }
+        .modal-soon-content button {
+          margin-top: 18px;
+          background: #ff69b4;
+          color: #fff;
+          border: none;
+          border-radius: 10px;
+          padding: 10px 28px;
+          font-size: 1em;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .modal-soon-content button:hover {
+          background: #d72660;
+        }
     </style>
 </head>
 <body>
@@ -1058,10 +1090,6 @@
                 <h1 class="welcome-title">Главное меню</h1>
                 <p class="welcome-subtitle">Выберите интересующий раздел</p>
                 <div class="main-menu">
-                    <button class="button lapaclicker-main-btn" onclick="showScreen('lapaclicker')">
-                        <span class="emoji">🐾</span>
-                        ЛапаКликер
-                    </button>
                     <button class="button" onclick="showScreen('project-selection')">
                         <span class="emoji">🎯</span>
                         Подбор проекта
@@ -1093,6 +1121,10 @@
                     <button class="button" onclick="showScreen('support')">
                         <span class="emoji">🛠️</span>
                         Тех. поддержка
+                    </button>
+                    <button class="button lapaclicker-main-btn" onclick="showModalSoon('lapaclicker')">
+                        <span class="emoji">🐾</span>
+                        ЛапаКликер
                     </button>
                 </div>
             </div>
@@ -2137,6 +2169,15 @@ Quest, only about quests тг (проходит набор раз в перио�
         // Переопределяем кнопку для показа кликера
         const lapaclickerBtn = document.querySelector('button[onclick="showScreen(\'lapaclicker\')"]');
         if (lapaclickerBtn) lapaclickerBtn.setAttribute('onclick', 'showLapaclicker()');
+
+        function showModalSoon(feature) {
+            let msg = 'Этот раздел в разработке!';
+            if (feature === 'lapaclicker') msg = 'ЛапаКликер скоро будет доступен!';
+            const modal = document.createElement('div');
+            modal.className = 'modal-soon';
+            modal.innerHTML = `<div class="modal-soon-content"><p>${msg}</p><button onclick="this.parentNode.parentNode.remove()">Ок</button></div>`;
+            document.body.appendChild(modal);
+        }
     </script>
 </body>
 </html>
