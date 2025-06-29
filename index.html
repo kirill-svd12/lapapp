@@ -25,7 +25,7 @@
     <script>
       // === Настройки приложения ===
       const botVersion = '1.1.4';
-      const lastUpdateDate = '25.06.2025';
+      const lastUpdateDate = '29.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
       const googleScriptUrl = 'https://wild-limit-5cdb.kirillsvedesev.workers.dev/';
@@ -2171,12 +2171,29 @@ Quest, only about quests тг (проходит набор раз в перио�
         if (lapaclickerBtn) lapaclickerBtn.setAttribute('onclick', 'showLapaclicker()');
 
         function showModalSoon(feature) {
-            let msg = 'Этот раздел в разработке!';
-            if (feature === 'lapaclicker') msg = 'ЛапаКликер скоро будет доступен!';
+            let icon = '🚧';
+            let title = 'В разработке!';
+            let text = 'Этот раздел скоро появится для всех пользователей.<br>Следите за обновлениями!';
+            if (feature === 'lapaclicker') {
+                icon = '🐾';
+                title = 'ЛапаКликер';
+                text = 'ЛапаКликер — мини-игра для всех участников!<br>Скоро будет доступна прямо в приложении.';
+            }
             const modal = document.createElement('div');
-            modal.className = 'modal-soon';
-            modal.innerHTML = `<div class="modal-soon-content"><p>${msg}</p><button onclick="this.parentNode.parentNode.remove()">Ок</button></div>`;
+            modal.className = 'modal-overlay';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-icon">${icon}</div>
+                    <div class="modal-title">${title}</div>
+                    <div class="modal-text">${text}</div>
+                    <button class="modal-button" onclick="this.closest('.modal-overlay').remove()">Понятно</button>
+                </div>
+            `;
             document.body.appendChild(modal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) modal.remove();
+            });
         }
     </script>
 </body>
