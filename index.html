@@ -28,7 +28,7 @@
       const lastUpdateDate = '25.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
-      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbz4nif5Toh064H0vhVayQpiqPoKaL1VURoWBe4Zxj19JOqTpWoGxknTKGYCyAYhe-lg2A/exec';
+      const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbx32xNwgOFWqQ5R3YN6vElG50admhCaIe3E3k6PUdnSj3EPSwJLLcL7zFgakb7MWAfeUw/exec';
       const botUsername = 'lapabot_bot'; // Имя вашего бота
 
       // === Ссылки на проекты ===
@@ -903,12 +903,16 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, box-shadow 0.2s;
         }
         .lapaclicker-btn.click-btn:hover {
             background: linear-gradient(90deg, #ff69b4 0%, #ffb6c1 100%);
-            transform: scale(1.04);
             box-shadow: 0 16px 40px rgba(255, 182, 193, 0.25);
+        }
+        .lapaclicker-btn.click-btn:active {
+            /* Без transform: scale, чтобы не было увеличения! */
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
+            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.18);
         }
         .paw-emoji {
             font-size: 2.5em;
