@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.4';
+      const botVersion = '1.1.5';
       const lastUpdateDate = '29.06.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -2097,7 +2097,6 @@ Quest, only about quests тг (проходит набор раз в перио�
 
         function showLapaclicker() {
             showScreen('lapaclicker');
-            // Если есть currentUser, используем его username, иначе просим ввести
             if (currentUser && currentUser.username) {
                 lapaclickerUser = currentUser.username;
                 document.getElementById('lapaclicker-auth').style.display = 'none';
@@ -2107,6 +2106,8 @@ Quest, only about quests тг (проходит набор раз в перио�
             } else {
                 document.getElementById('lapaclicker-auth').style.display = '';
                 document.getElementById('lapaclicker-game').style.display = 'none';
+                // Показываем кнопку "Поделиться юзернеймом"
+                document.getElementById('lapaclicker-share-btn').style.display = '';
             }
         }
 
@@ -2194,6 +2195,14 @@ Quest, only about quests тг (проходит набор раз в перио�
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) modal.remove();
             });
+        }
+
+        function shareLapaclickerUsername() {
+            if (tg && tg.requestContact) {
+                tg.requestContact();
+            } else {
+                alert('Функция доступна только в Telegram WebApp');
+            }
         }
     </script>
 </body>
