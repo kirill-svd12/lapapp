@@ -2161,9 +2161,10 @@ Quest, only about quests тг (проходит набор раз в перио�
             .then(res => res.json())
             .then(res => {
                 if (res.result === 'ok') {
-                    document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
+                    // После сохранения — повторно загружаем максимум из таблицы
+                    lapaclickerLoad();
+                    // Не сбрасываем интерфейс!
                 }
-                // Больше никаких alert и ошибок!
             });
         }
 
