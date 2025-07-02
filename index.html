@@ -24,12 +24,46 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.9';
+      const botVersion = '1.1.3';
       const lastUpdateDate = '01.07.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
       const googleScriptUrl = 'https://wild-limit-5cdb.kirillsvedesev.workers.dev/';
       const botUsername = 'lapabot_bot'; // Имя вашего бота
+
+      // === Supabase настройки для кликера ===
+      const supabaseUrl = 'https://sqpfscuyofevrywfbubm.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGZzY3V5b2ZldnJ5d2ZidWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTA0NTIsImV4cCI6MjA2NzAyNjQ1Mn0.QQFwpBpMSe1eslWPpMGV86qCsYluHUvMYEBEn-lqFdo';
+
+      // Получить максимум кликов пользователя
+      async function getUserClicks(username) {
+        const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}`, {
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await res.json();
+        return data.length > 0 ? data[0].clicks : 0;
+      }
+
+      // Сохранить максимум кликов пользователя (только если больше)
+      async function saveUserClicks(username, clicks) {
+        const current = await getUserClicks(username);
+        if (clicks > current) {
+          await fetch(`${supabaseUrl}/rest/v1/clicks`, {
+            method: 'POST',
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify([{ username, clicks }])
+          });
+        }
+      }
 
       // === Ссылки на проекты ===
       const projectLinks = {
@@ -2201,22 +2235,16 @@ Quest, only about quests тг (проходит набор раз в перио�
             lapaclickerLoad();
         }
 
-        function lapaclickerLoad() {
-            // Получаем максимум из Google Script
-            fetch(googleScriptUrl + '?action=get_lapaclicker&username=' + encodeURIComponent(lapaclickerUser))
-                .then(res => res.json())
-                .then(data => {
-                    lapaclickerMax = data.max_clicks ? parseInt(data.max_clicks) : 0;
-                    lapaclickerCount = 0;
-                    document.getElementById('lapaclicker-max').innerHTML = '<span class="lapaclicker-spinner"></span>';
-                    document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
-                })
-                .catch(() => {
-                    lapaclickerMax = 0;
-                    lapaclickerCount = 0;
-                    document.getElementById('lapaclicker-max').innerHTML = '<span class="lapaclicker-spinner"></span>';
-                    document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
-                });
+        async function lapaclickerLoad() {
+            document.getElementById('lapaclicker-max').innerHTML = '<span class="lapaclicker-spinner"></span>';
+            try {
+                lapaclickerMax = await getUserClicks(lapaclickerUser);
+            } catch {
+                lapaclickerMax = 0;
+            }
+            lapaclickerCount = 0;
+            document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
+            document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
         }
 
         function lapaclickerClick() {
@@ -2224,25 +2252,11 @@ Quest, only about quests тг (проходит набор раз в перио�
             document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
         }
 
-        function lapaclickerSave() {
+        async function lapaclickerSave() {
             if (!lapaclickerUser) return;
             if (lapaclickerCount > lapaclickerMax) lapaclickerMax = lapaclickerCount;
-            const formData = new URLSearchParams();
-            formData.append('action', 'save_lapaclicker');
-            formData.append('username', lapaclickerUser);
-            formData.append('max_clicks', lapaclickerMax);
-            fetch(googleScriptUrl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.result === 'ok') {
-                    // После сохранения — повторно загружаем максимум из таблицы
-                    lapaclickerLoad();
-                    // Не сбрасываем интерфейс!
-                }
-            });
+            await saveUserClicks(lapaclickerUser, lapaclickerMax);
+            await lapaclickerLoad();
         }
 
         // Переопределяем кнопку для показа кликера
