@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.7';
+      const botVersion = '1.1.8';
       const lastUpdateDate = '01.07.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -124,6 +124,44 @@
               forMoney14: 'https://telegra.ph/Za-dengi---da-06-15', // За деньги - да 14+(12+)
           }
       };
+
+      // Проверка пользователя в Supabase и создание, если не существует
+      async function checkOrCreateUser(username) {
+        // Проверяем, есть ли пользователь
+        let clicks = 0;
+        try {
+          const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}&select=clicks`, {
+            headers: {
+              'apikey': supabaseKey,
+              'Authorization': `Bearer ${supabaseKey}`
+            }
+          });
+          const data = await res.json();
+          if (data && data.length > 0) {
+            clicks = data[0].clicks || 0;
+          } else {
+            // Если пользователя нет — создаём
+            const createRes = await fetch(`${supabaseUrl}/rest/v1/clicks`, {
+              method: 'POST',
+              headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+              },
+              body: JSON.stringify([{ username, clicks: 0 }])
+            });
+            if (createRes.ok) {
+              clicks = 0;
+            } else {
+              console.error('Ошибка создания пользователя:', await createRes.text());
+            }
+          }
+        } catch (e) {
+          console.error('Ошибка при проверке/создании пользователя:', e);
+        }
+        return clicks;
+      }
     </script>
     <style>
         :root {
@@ -2247,21 +2285,25 @@ Quest, only about quests тг (проходит набор раз в перио�
         let lapaclickerMax = 0;
         let lapaclickerCount = 0;
 
-        function showLapaclicker() {
+        async function showLapaclicker() {
             showScreen('lapaclicker');
             if (currentUser && currentUser.username) {
                 lapaclickerUser = currentUser.username;
                 document.getElementById('lapaclicker-auth').style.display = 'none';
                 document.getElementById('lapaclicker-game').style.display = '';
                 document.getElementById('lapaclicker-user').textContent = lapaclickerUser;
-                lapaclickerLoad();
+                // Проверяем или создаём пользователя
+                lapaclickerMax = await checkOrCreateUser(lapaclickerUser);
+                lapaclickerCount = 0;
+                document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
+                document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
             } else {
                 document.getElementById('lapaclicker-auth').style.display = '';
                 document.getElementById('lapaclicker-game').style.display = 'none';
             }
         }
 
-        function lapaclickerStart() {
+        async function lapaclickerStart() {
             const username = document.getElementById('lapaclicker-username').value.trim();
             if (!username) {
                 alert('Введите ник!');
@@ -2271,7 +2313,11 @@ Quest, only about quests тг (проходит набор раз в перио�
             document.getElementById('lapaclicker-auth').style.display = 'none';
             document.getElementById('lapaclicker-game').style.display = '';
             document.getElementById('lapaclicker-user').textContent = lapaclickerUser;
-            lapaclickerLoad();
+            // Проверяем или создаём пользователя
+            lapaclickerMax = await checkOrCreateUser(lapaclickerUser);
+            lapaclickerCount = 0;
+            document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
+            document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
         }
 
         async function lapaclickerLoad() {
