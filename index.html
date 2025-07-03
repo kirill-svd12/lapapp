@@ -127,43 +127,46 @@
     </script>
     <style>
         :root {
-            --coffee-milk: #E9DCC3;
-            --coffee: #996b4d;
-            --coffee-dark: #4B3621;
-            --white: #fff;
-            --black: #181818;
-            --text-color: #181818;
-            --bg-color: var(--coffee-milk);
-            --button-bg: var(--coffee);
-            --button-hover: var(--coffee-dark);
-            --button-text: var(--white);
-            --button-border: var(--coffee-dark);
-            --card-bg: var(--white);
-            --card-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            --glass-bg: var(--white);
-            --glass-border: #e0e0e0;
-            --accent-color: var(--black);
-            --gradient-start: var(--white);
-            --gradient-end: var(--white);
+            --primary-color: #FFB6C1;
+            --secondary-color: #FFF0F5;
+            --text-color: #4A4A4A;
+            --bg-color: #FFFFFF;
+            --button-text-color: #4A4A4A;
+            --card-shadow: 0 8px 32px rgba(255, 182, 193, 0.15);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-start: #FFB6C1;
+            --gradient-end: #FFC0CB;
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 182, 193, 0.2);
+            --accent-color: #FF69B4;
         }
 
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: var(--bg-color);
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF0F5 100%);
             color: var(--text-color);
             line-height: 1.6;
             min-height: 100vh;
             height: 100%;
             position: relative;
             overflow-x: hidden;
-            background-attachment: fixed;
+            background-attachment: fixed; /* Применено ко всем размерам экрана */
         }
 
         body::before {
-            display: none;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 192, 203, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         #app {
@@ -241,9 +244,9 @@
             width: 100%;
             padding: 20px 30px;
             margin: 0;
-            background: var(--button-bg);
-            color: var(--button-text);
-            border: 2px solid var(--button-border);
+            background: var(--glass-bg);
+            color: var(--button-text-color);
+            border: 2px solid var(--glass-border);
             border-radius: 20px;
             cursor: pointer;
             text-align: left;
@@ -257,37 +260,47 @@
         }
 
         .button::after {
-            display: none;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 182, 193, 0.1),
+                transparent
+            );
+            transform: translateX(-100%);
+            transition: 0.6s;
         }
 
-        .button:hover, .button:focus {
-            background: var(--button-hover);
-            color: var(--white);
-            border-color: var(--coffee-dark);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-            transform: none;
+        .button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(255, 182, 193, 0.25);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
 
         .button:active {
-            background: var(--coffee-dark);
-            color: var(--white);
+            transform: translateY(-1px) scale(0.98);
         }
 
         .back-button {
-            background: var(--button-bg);
-            color: var(--button-text);
+            background: var(--glass-bg);
+            color: var(--accent-color);
             font-weight: 500;
-            border: 2px solid var(--button-border);
+            border: 2px solid var(--accent-color);
             box-shadow: none;
-            border-radius: 20px;
+            backdrop-filter: blur(8px);
+            grid-column: 1 / -1;
             justify-content: center;
-            transition: var(--transition);
         }
 
-        .back-button:hover, .back-button:focus {
-            background: var(--button-hover);
-            color: var(--white);
-            border-color: var(--coffee-dark);
+        .back-button:hover {
+            background: rgba(255, 182, 193, 0.1);
+            transform: translateY(-2px);
         }
 
         /* Стили для квизов */
@@ -816,21 +829,20 @@
 
         /* --- Новый дизайн для главного меню --- */
         .lapaclicker-main-btn {
-            background: #382b1f;
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
             color: #fff;
             font-size: 1.4em;
             font-weight: 700;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-            border: 2px solid #382b1f;
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.25);
+            border: none;
             letter-spacing: 1px;
             margin-bottom: 18px;
-            border-radius: 20px;
-            transition: var(--transition);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .lapaclicker-main-btn:hover {
-            background: #4B3621;
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 16px 40px rgba(255, 182, 193, 0.35);
             color: #fff;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.13);
         }
 
         /* --- Новый дизайн для ЛапаКликера --- */
@@ -839,15 +851,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--coffee-milk) 0%, var(--white) 100%);
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4ec 100%);
             border-radius: 30px;
-            box-shadow: 0 8px 32px rgba(123, 94, 59, 0.10);
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.15);
             padding: 30px 0;
         }
         .lapaclicker-card {
             background: rgba(255,255,255,0.98);
             border-radius: 32px;
-            box-shadow: 0 8px 32px rgba(123, 94, 59, 0.13);
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.18);
             padding: 40px 30px 30px 30px;
             max-width: 400px;
             width: 100%;
@@ -859,52 +871,37 @@
         .lapaclicker-title {
             font-size: 2.2em;
             font-weight: 800;
-            background: none;
-            color: var(--black);
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 24px;
             letter-spacing: 1px;
             text-align: center;
         }
         .lapaclicker-auth label {
             font-size: 1.1em;
-            color: var(--black);
+            color: #ff69b4;
             font-weight: 600;
         }
         .lapaclicker-auth input {
             margin-top: 12px;
             padding: 14px 18px;
             border-radius: 12px;
-            border: 1.5px solid var(--black);
+            border: 1.5px solid #ffd1e3;
             font-size: 1.1em;
             width: 90%;
             max-width: 260px;
             margin-bottom: 12px;
-            background: var(--white);
-            color: var(--black);
+            background: #fff8fa;
             transition: border 0.2s;
         }
         .lapaclicker-auth input:focus {
-            border: 1.5px solid var(--black);
+            border: 1.5px solid #ff69b4;
             outline: none;
         }
-        .lapaclicker-btn, .lapaclicker-btn.save-btn, .lapaclicker-btn.click-btn {
-            background: var(--button-bg) !important;
-            color: var(--button-text) !important;
-            border: 2px solid var(--button-border) !important;
-            border-radius: 20px !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
-            transition: var(--transition) !important;
-        }
-        .lapaclicker-btn:hover, .lapaclicker-btn.save-btn:hover, .lapaclicker-btn.click-btn:hover {
-            background: var(--button-hover) !important;
-            color: var(--white) !important;
-            border-color: var(--coffee-dark) !important;
-        }
-        .lapaclicker-btn:active, .lapaclicker-btn.save-btn:active, .lapaclicker-btn.click-btn:active {
-            background: var(--coffee-dark) !important;
-            color: var(--white) !important;
-        }
         .lapaclicker-btn {
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
+            color: #fff;
             font-size: 1.2em;
             font-weight: 700;
             border: none;
@@ -912,30 +909,30 @@
             padding: 18px 0;
             width: 100%;
             margin: 10px 0 0 0;
-            box-shadow: 0 4px 16px rgba(123, 94, 59, 0.13);
+            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.18);
             cursor: pointer;
             transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
             letter-spacing: 1px;
         }
         .lapaclicker-btn:hover {
-            background: linear-gradient(90deg, var(--coffee) 0%, var(--coffee-dark) 100%);
+            background: linear-gradient(90deg, #ff69b4 0%, #ffb6c1 100%);
             transform: scale(1.03);
-            box-shadow: 0 8px 32px rgba(123, 94, 59, 0.18);
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.25);
         }
         .lapaclicker-btn.save-btn {
             margin-bottom: 18px;
             font-size: 1.1em;
-            background: linear-gradient(90deg, var(--coffee) 0%, var(--coffee-dark) 100%);
+            background: linear-gradient(90deg, #ff69b4 0%, #ffb6c1 100%);
         }
         .lapaclicker-btn.click-btn {
             font-size: 2em;
             padding: 32px 0;
             margin-top: 10px;
-            background: linear-gradient(90deg, var(--coffee-light) 0%, var(--coffee) 100%);
-            color: var(--white);
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
+            color: #fff;
             border: none;
             border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(123, 94, 59, 0.10);
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.18);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -943,12 +940,13 @@
             transition: background 0.2s, box-shadow 0.2s;
         }
         .lapaclicker-btn.click-btn:hover {
-            background: linear-gradient(90deg, var(--coffee) 0%, var(--coffee-dark) 100%);
-            box-shadow: 0 16px 40px rgba(123, 94, 59, 0.18);
+            background: linear-gradient(90deg, #ff69b4 0%, #ffb6c1 100%);
+            box-shadow: 0 16px 40px rgba(255, 182, 193, 0.25);
         }
         .lapaclicker-btn.click-btn:active {
-            background: linear-gradient(90deg, var(--coffee-light) 0%, var(--coffee) 100%);
-            box-shadow: 0 4px 16px rgba(123, 94, 59, 0.10);
+            /* Без transform: scale, чтобы не было увеличения! */
+            background: linear-gradient(90deg, #ffb6c1 0%, #ff69b4 100%);
+            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.18);
         }
         .paw-emoji {
             font-size: 2.5em;
@@ -967,17 +965,16 @@
             gap: 8px;
         }
         .lapaclicker-stat {
-            background: var(--white);
+            background: #fff0f5;
             border-radius: 12px;
             padding: 10px 14px;
             font-size: 1.1em;
             font-weight: 600;
-            color: var(--black);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            color: #ff69b4;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.08);
             display: flex;
             align-items: center;
             gap: 6px;
-            border: 1px solid var(--black);
         }
         .lapaclicker-game {
             width: 100%;
@@ -1217,6 +1214,10 @@
                     <button class="button" onclick="showScreen('basic-info')">
                         <span class="emoji">📚</span>
                         Базовая информация
+                    </button>
+                    <button class="button" onclick="showScreen('encyclopedia')">
+                        <span class="emoji">📖</span>
+                        Энциклопедия
                     </button>
                     <button class="button" onclick="showScreen('advanced-info')">
                         <span class="emoji">🎓</span>
@@ -1905,6 +1906,39 @@ Quest, only about quests тг (проходит набор раз в перио�
             </div>
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
+
+        <!-- Энциклопедия6 -->
+        <div id="encyclopedia" class="screen">
+            <div class="text-content">
+                <h2>Энциклопедия</h2>
+                <div id="encyclopedia-list">
+                    <button class="button" onclick="showEncycloDef(1)">Мир квестов (МК, мирок)</button>
+                    <button class="button" onclick="showEncycloDef(2)">Клаустрафобия (клаусы)</button>
+                    <button class="button" onclick="showEncycloDef(3)">Мк команды (мкшники)</button>
+                    <button class="button" onclick="showEncycloDef(4)">Лимонницы/лимнники</button>
+                    <button class="button" onclick="showEncycloDef(5)">Quest Stars (кусты)</button>
+                    <button class="button" onclick="showEncycloDef(6)">Quest Vision (квест вижин)</button>
+                    <button class="button" onclick="showEncycloDef(7)">Голубь</button>
+                    <button class="button" onclick="showEncycloDef(8)">Зелень (зеленка)</button>
+                    <button class="button" onclick="showEncycloDef(9)">ФОП спецухи</button>
+                    <button class="button" onclick="showEncycloDef(10)">Электрозавод (завод)</button>
+                    <button class="button" onclick="showEncycloDef(11)">ИГС, АХС и тд</button>
+                    <button class="button" onclick="showEncycloDef(12)">Куратор</button>
+                    <button class="button" onclick="showEncycloDef(13)">Купонные квесты (фс)</button>
+                    <button class="button" onclick="showEncycloDef(14)">Биглион</button>
+                    <button class="button" onclick="showEncycloDef(15)">Индивидуальное задание (индива, индивидуалка)</button>
+                    <button class="button" onclick="showEncycloDef(16)">Обзорщики</button>
+                    <button class="button" onclick="showEncycloDef(17)">Спецверсия (спецуха)</button>
+                    <button class="button" onclick="showEncycloDef(18)">Альтернативная версия (альтернативка)</button>
+                    <button class="button" onclick="showEncycloDef(19)">Фейс ту Фейс</button>
+                    <button class="button" onclick="showEncycloDef(20)">Подслушка (пки)</button>
+                    <button class="button" onclick="showEncycloDef(21)">Контакт</button>
+                    <button class="button" onclick="showEncycloDef(22)">Морковка</button>
+                </div>
+            </div>
+            <div id="encyclopedia-def" style="display:none;"></div>
+            <button class="button back-button" id="encyclopedia-back"><span class="emoji">⬅️</span>Назад</button>
+        </div>
     </div>
 
     <div class="footer">
@@ -2308,6 +2342,58 @@ Quest, only about quests тг (проходит набор раз в перио�
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) modal.remove();
             });
+        }
+
+        // Энциклопедия: определения
+        const encyclopediaDefs = [
+            '',
+            'Мир квестов (МК, мирок) — главный квестовый агрегатор, почти все квесты Москвы вы можете найти именно на нем',
+            'Клаустрафобия (клаусы) — чуть менее популярный квестовый агрегатор, чем Мир квестов, но на нем также стоят многие квесты',
+            'Мк команды (мкшники) — игроки, которые ходят через агрегаторов',
+            'Лимонницы/лимнники — как правило несовершеннолетние игроки, которые ходят за эро контактом',
+            'Quest Stars (кусты) — квестовая компания, которая под своим куполом собирает почти все перформансы Москвы',
+            'Quest Vision (квест вижин) — компания, которая делает видео-прохождения квестов, её главой является Артём квествижин',
+            'Голубь — администратор телеграмм канала «Мир глазами голубя», очень известный обзорщик',
+            'Зелень (зеленка) — игроки, которые являются новичками в квест индустрии',
+            'ФОП спецухи — спец версии, которые делают актеры с фопа, часто такие спецухи пишутся на коленке и ставятся на скорую руку',
+            'Электрозавод (завод) — сгоревший завод на Электрозаводской на котором раньше стояли многие квесты Москвы',
+            'ИГС, АХС и тд — аббревиатуры квестов, составленные по первым буквам слов из названия',
+            'Куратор — актер или опытный игрок, который может тебя забронировать со скидкой на квест и договорится по возрастному ограничению',
+            'Купонные квесты (фс) — квесты очень низкого качества «подвальные», на них обычно ходят по купонам, цена за команду из 4 человек обычно составляет 2,5 тысячи рублей. Ранее была компания, которая делала проекты низкого качества, называлась она «Фактор страха», компания распалась. А «прозвище» низкокачественных проектов осталось',
+            'Биглион — сайт на котором можно купить купоны на фс квесты',
+            'Индивидуальное задание (индива, индивидуалка) — задание на квесте, на которое может отправиться только один игрок из команды',
+            'Обзорщики — игроки, которые как правило пишут рецензии на квесты',
+            'Спецверсия (спецуха) — специальная версия квеста, которая ставится на локации какого-то квеста, но с новым сюжетом',
+            'Альтернативная версия (альтернативка) — специальная версия квеста, которая как правило является приквелом или сиквелом основного сюжета квеста, либо же просто другой версией с видоизмененным сюжетом и жанром',
+            'Фейс ту Фейс — скримеры, которые делаются при маленьком расстоянием с актером из темноты «лицом к лицу»',
+            'Подслушка (пки) — послушано квестовой индустрии, в котором игроки могут найти себе команду на квест или разместить отзыв на квест',
+            'Контакт — это уровень взаимодействия с актером, обычно он делится на:\n1. Лайт - легкие касания\n2. Медиум - актер может тебя схватить за плечо, руку, утащить куда-то\n3. Хард - плотный контакт с актером',
+            'Морковка - так сейчас называют контакт',
+        ];
+
+        function showEncycloDef(idx) {
+            const list = document.getElementById('encyclopedia-list');
+            const def = document.getElementById('encyclopedia-def');
+            list.style.display = 'none';
+            def.style.display = '';
+            def.innerHTML = `<div class=\"text-content\">${encyclopediaDefs[idx]}</div>`;
+        }
+        function encycloBack() {
+            document.getElementById('encyclopedia-list').style.display = '';
+            document.getElementById('encyclopedia-def').style.display = 'none';
+        }
+
+        // Исправленный обработчик для единственной кнопки "Назад" в энциклопедии
+        const encyclopediaBackBtn = document.getElementById('encyclopedia-back');
+        if (encyclopediaBackBtn) {
+            encyclopediaBackBtn.onclick = function() {
+                const def = document.getElementById('encyclopedia-def');
+                if (def.style.display === '' && def.innerHTML.trim() !== '') {
+                    encycloBack();
+                } else {
+                    goBack();
+                }
+            };
         }
     </script>
 </body>
