@@ -24,143 +24,51 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.8';
+      const botVersion = '1.1.9';
       const lastUpdateDate = '01.07.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
       const googleScriptUrl = 'https://wild-limit-5cdb.kirillsvedesev.workers.dev/';
       const botUsername = 'lapabot_bot'; // Имя вашего бота
 
-      // === Supabase настройки для кликера ===
-      const supabaseUrl = 'https://sqpfscuyofevrywfbubm.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGZzY3V5b2ZldnJ5d2ZidWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTA0NTIsImV4cCI6MjA2NzAyNjQ1Mn0.QQFwpBpMSe1eslWPpMGV86qCsYluHUvMYEBEn-lqFdo';
+      // === Функции для работы с Google Таблицами ===
+      async function loadLapabalts() {
+          const dataContainer = document.getElementById('lapabalts-data');
+          dataContainer.innerHTML = '<p>Загрузка данных...</p>';
 
-      // Получить максимум кликов пользователя
-      async function getUserClicks(username) {
-        const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}&select=clicks`, {
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`
-          }
-        });
-        const data = await res.json();
-        return data[0]?.clicks || 0;
-      }
-
-      // Сохранить максимум кликов пользователя (upsert)
-      async function saveUserClicks(username, clicks) {
-        console.log("➡️ Сохраняем:", { username, clicks });
-        const res = await fetch(`${supabaseUrl}/rest/v1/clicks`, {
-          method: 'POST',
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'resolution=merge-duplicates'
-          },
-          body: JSON.stringify([{ username, clicks }])
-        });
-        const data = await res.json();
-        console.log("✅ Ответ от Supabase:", res.status, data);
-        return { success: res.ok, data };
-      }
-
-      // === Ссылки на проекты ===
-      const projectLinks = {
-          actionGames: {
-              stress18: 'https://telegra.ph/Proekt-Stress-06-16', // Проект стресс 18+
-              lastOfUs18: 'https://telegra.ph/The-Last-of-Us-06-16-2', // The last of us 18+
-              alkatras18: 'https://telegra.ph/Pryatki-v-Alkatrase-06-16', // Прятки в Алькатрасе 18+
-          },
-          immersive: {
-              suspicion14: 'https://telegra.ph/Podozrenie-padaet-na-05-23', // Подозрение падает на 14+
-              familyVow16: 'https://telegra.ph/Semejnyj-obet-05-23', // Семейный обет 16+
-              insaneParanoid16: 'https://telegra.ph/Insane-Paranoid-06-16', // Insane Paranoid 16+
-              whoHid12: 'https://telegra.ph/Kto-ne-spryatalsya-06-16', // Кто не спрятался 12+
-          },
-          escape: {
-              moreDifficult: {
-                  foris16: 'https://telegra.ph/Obekt-Foris-06-16',  // Объект форис 16+
-                  arthur14: 'https://telegra.ph/Mech-korolya-Artura-06-16-2', // Меч короля Артура 14+(10+)
-                  tenLittleIndians14: 'https://telegra.ph/Desyat-negrityat-06-16', // 10 негритят 14+
-                  airCaptivity14: 'https://telegra.ph/Vozdushnyj-plen-06-16', // Воздушный плен 14+(10+)
-                  inheritance14: 'https://telegra.ph/Vkus-nasledstva-06-16', // Вкус наследства 14+(11+)
-              },
-              lessDifficult: {
-                  backToUSSR14: 'https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16', // Назад в СССР: перегрузка 14+(12+)
-                  byTouch14: 'https://telegra.ph/Na-oshchup-06-16', // На ощупь 14+(12+)
-                  pharaoh7riddles14: 'https://telegra.ph/7-zagadok-faraona-06-16', // 7 загадок фараона 14+(10+)
-                  oblivionAvalanche14: 'https://telegra.ph/Lavina-zabveniya-06-16', // Лавина забвения 14+(8+)
+          try {
+              const response = await fetch(googleSheetsUrl);
+              if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
               }
-          },
-          maniac: {
-              wrongTurn16: 'https://telegra.ph/Povorot-ne-tuda-06-16', // Поворот не туда 16+
-              uninvitedGuests12: 'https://telegra.ph/Nezvanye-gosti-06-16', // Незваные гости 12+
-              fatum18: 'https://telegra.ph/Proekt-Fatum-06-16', // Проект Fatum 18+
-          },
-          mystic: {
-              nightmares14: 'https://telegra.ph/Nightmares-06-16', // Nightmares 14+
-              evilWithin16: 'https://telegra.ph/The-Evil-Within-06-16', // The Evil Within 16+
-              outlast16: 'https://telegra.ph/Outlast-06-16', // Outlast 16+
-              amnesia16: 'https://telegra.ph/Amnesia-06-16', // Amnesia 16+
-              fear16: 'https://telegra.ph/Fear-06-16', // Fear 16+
-              poltergeist16: 'https://telegra.ph/Poltergejst-06-16', // Полтергейст 16+
-              fnaf18: 'https://telegra.ph/Five-Nights-at-Freddys-06-16-2', // Five Nights at Freddy's 18+(12+)
-              saw16: 'https://telegra.ph/Pila-06-16', // Пила 16+
-              it16: 'https://telegra.ph/Ono-06-16', // Оно 16+
-              babadook15: 'https://telegra.ph/Babadook-06-16', // Babadook 15+(12+)
-              gloom16: 'https://telegra.ph/Mgla-06-16', // Мгла 16+(12+)
-              tarotDeathCard18: 'https://telegra.ph/Taro-karta-smerti-06-16', // Таро: карта смерти 18+(16+)
-              gravediggers14: 'https://telegra.ph/Iskateli-mogil-06-16', // Искатели могил 14+
-          },
-          mixed: {
-              aven14: 'https://telegra.ph/Lechebnica-sv-Avena-06-16', // Авен 14+
-              rage16: 'https://telegra.ph/Rage-06-16', // Rage 16+
-              momo14: 'https://telegra.ph/Momo-06-16', // Момо 14+
-              deadInside12: 'https://telegra.ph/Dead-Inside-06-16', // Dead inside 12+
-              ahs12: 'https://telegra.ph/Amerikanskaya-istoriya-uzhasov-06-16', // Американская история ужасов 12+
-              sidr12: 'https://telegra.ph/Strashnye-istorii-dlya-rasskazov-v-temnote-06-15', // СИДР 12+
-              scp14: 'https://telegra.ph/SCP-06-15', // Scp 14+
-              forMoney14: 'https://telegra.ph/Za-dengi---da-06-15', // За деньги - да 14+(12+)
-          }
-      };
+              const csvText = await response.text();
+              
+              const rows = csvText.split(/\r?\n/).map(row => row.trim()).filter(row => row.length > 0);
+              
+              if (rows.length < 2) {
+                  dataContainer.innerHTML = '<p>Данные не найдены или таблица пуста.</p>';
+                  return;
+              }
 
-      // Проверка пользователя в Supabase и создание, если не существует
-      async function checkOrCreateUser(username) {
-        // Проверяем, есть ли пользователь
-        let clicks = 0;
-        try {
-          const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}&select=clicks`, {
-            headers: {
-              'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`
-            }
-          });
-          const data = await res.json();
-          if (data && data.length > 0) {
-            clicks = data[0].clicks || 0;
-          } else {
-            // Если пользователя нет — создаём
-            const createRes = await fetch(`${supabaseUrl}/rest/v1/clicks`, {
-              method: 'POST',
-              headers: {
-                'apikey': supabaseKey,
-                'Authorization': `Bearer ${supabaseKey}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'resolution=merge-duplicates'
-              },
-              body: JSON.stringify([{ username, clicks: 0 }])
-            });
-            if (createRes.ok) {
-              clicks = 0;
-            } else {
-              console.error('Ошибка создания пользователя:', await createRes.text());
-            }
+              dataContainer.innerHTML = '';
+
+              // Добавляем заголовки
+              dataContainer.innerHTML += `<div class="lapabalts-header">Имя пользователя Telegram</div><div class="lapabalts-header">Лапабаллы</div>`;
+
+              // Пропускаем первую строку (заголовки) и обрабатываем остальные
+              for (let i = 1; i < rows.length; i++) {
+                  const cols = rows[i].split(',');
+                  if (cols.length >= 2) {
+                      const username = cols[0].trim();
+                      const lapabalts = cols[1].trim();
+                      dataContainer.innerHTML += `<div class="lapabalts-item">${username}</div><div class="lapabalts-item">${lapabalts}</div>`;
+                  }
+              }
+
+          } catch (error) {
+              console.error('Ошибка загрузки данных:', error);
+              dataContainer.innerHTML = '<p>Не удалось загрузить данные. Проверьте ссылку и настройки публикации таблицы.</p>';
           }
-        } catch (e) {
-          console.error('Ошибка при проверке/создании пользователя:', e);
-        }
-        return clicks;
       }
     </script>
     <style>
@@ -1344,20 +1252,20 @@
         <div id="more-difficult" class="screen">
             <div class="text-content">Более сложные эскейпы:</div>
             <a class="button" href="https://telegra.ph/Obekt-Foris-06-16" target="_blank">Объект форис 16+</a>
-            <a class="button" href="https://telegra.ph/Mech-korolya-Artura-06-16-2" target="_blank">Меч короля Артура 14+(10+)</a>
+            <a class="button" href="https://telegra.ph/Mech-korolya-Artura-06-16-2" target="_blank">Меч короля Артура 14+(10+)
             <a class="button" href="https://telegra.ph/Desyat-negrityat-06-16" target="_blank">10 негритят 14+</a>
-            <a class="button" href="https://telegra.ph/Vozdushnyj-plen-06-16" target="_blank">Воздушный плен 14+(10+)</a>
-            <a class="button" href="https://telegra.ph/Vkus-nasledstva-06-16" target="_blank">Вкус наследства 14+(11+)</a>
+            <a class="button" href="https://telegra.ph/Vozdushnyj-plen-06-16" target="_blank">Воздушный плен 14+(10+)
+            <a class="button" href="https://telegra.ph/Vkus-nasledstva-06-16" target="_blank">Вкус наследства 14+(11+)
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
         <!-- Менее сложные эскейпы -->
         <div id="less-difficult" class="screen">
             <div class="text-content">Менее сложные эскейпы:</div>
-            <a class="button" href="https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16" target="_blank">Назад в СССР: перегрузка 14+(12+)</a>
-            <a class="button" href="https://telegra.ph/Na-oshchup-06-16" target="_blank">На ощупь 14+(12+)</a>
-            <a class="button" href="https://telegra.ph/7-zagadok-faraona-06-16" target="_blank">7 загадок фараона 14+(10+)</a>
-            <a class="button" href="https://telegra.ph/Lavina-zabveniya-06-16" target="_blank">Лавина забвения 14+(8+)</a>
+            <a class="button" href="https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16" target="_blank">Назад в СССР: перегрузка 14+(12+)
+            <a class="button" href="https://telegra.ph/Na-oshchup-06-16" target="_blank">На ощупь 14+(12+)
+            <a class="button" href="https://telegra.ph/7-zagadok-faraona-06-16" target="_blank">7 загадок фараона 14+(10+)
+            <a class="button" href="https://telegra.ph/Lavina-zabveniya-06-16" target="_blank">Лавина забвения 14+(8+)
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
@@ -1379,13 +1287,13 @@
             <a class="button" href="https://telegra.ph/Amnesia-06-16" target="_blank">Amnesia 16+</a>
             <a class="button" href="https://telegra.ph/Fear-06-16" target="_blank">Fear 16+</a>
             <a class="button" href="https://telegra.ph/Poltergejst-06-16" target="_blank">Полтергейст 16+</a>
-            <a class="button" href="https://telegra.ph/Five-Nights-at-Freddys-06-16-2" target="_blank">Five Nights at Freddy's 18+(12+)</a>
+            <a class="button" href="https://telegra.ph/Five-Nights-at-Freddys-06-16-2" target="_blank">Five Nights at Freddy's 18+(12+)
             <a class="button" href="https://telegra.ph/Pila-06-16" target="_blank">Пила 16+</a>
             <a class="button" href="https://telegra.ph/Ono-06-16" target="_blank">Оно 16+</a>
-            <a class="button" href="https://telegra.ph/Babadook-06-16" target="_blank">Babadook 15+(12+)</a>
-            <a class="button" href="https://telegra.ph/Mgla-06-16" target="_blank">Мгла 16+(12+)</a>
-            <a class="button" href="https://telegra.ph/Taro-karta-smerti-06-16" target="_blank">Таро: карта смерти 18+(16+)</a>
-            <a class="button" href="https://telegra.ph/Iskateli-mogil-06-16" target="_blank">Искатели могил 14+</a>
+            <a class="button" href="https://telegra.ph/Babadook-06-16" target="_blank">Babadook 15+(12+)
+            <a class="button" href="https://telegra.ph/Mgla-06-16" target="_blank">Мгла 16+(12+)
+            <a class="button" href="https://telegra.ph/Taro-karta-smerti-06-16" target="_blank">Таро: карта смерти 18+(16+)
+            <a class="button" href="https://telegra.ph/Iskateli-mogil-06-16" target="_blank">Искатели могил 14+
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
@@ -1399,7 +1307,7 @@
             <a class="button" href="https://telegra.ph/Amerikanskaya-istoriya-uzhasov-06-16" target="_blank">Американская история ужасов 12+</a>
             <a class="button" href="https://telegra.ph/Strashnye-istorii-dlya-rasskazov-v-temnote-06-15" target="_blank">СИДР 12+</a>
             <a class="button" href="https://telegra.ph/SCP-06-15" target="_blank">Scp 14+</a>
-            <a class="button" href="https://telegra.ph/Za-dengi---da-06-15" target="_blank">За деньги - да 14+(12+)</a>
+            <a class="button" href="https://telegra.ph/Za-dengi---da-06-15" target="_blank">За деньги - да 14+(12+)
             <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
         </div>
 
