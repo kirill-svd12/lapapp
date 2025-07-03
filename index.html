@@ -24,7 +24,7 @@
     ></script>
     <script>
       // === Настройки приложения ===
-      const botVersion = '1.1.6';
+      const botVersion = '1.1.7';
       const lastUpdateDate = '01.07.2025';
       const googleSheetsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9fzIQ878rfJa1xlMFpVfWUankyDTXY57A3xD4wPr2bIoKVjLS-9jlSHs_zDwAHXPsoP_sZpGm1tM7/pub?gid=0&single=true&output=csv';
       const adminIds = [5014279740]; // Ваш Telegram ID
@@ -33,24 +33,23 @@
 
       // === Supabase настройки для кликера ===
       const supabaseUrl = 'https://sqpfscuyofevrywfbubm.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGZzY3V5b2ZldnJ5d2ZidWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTA0NTIsImV4cCI6MjA2NzAyNjQ1Mn0.QQFwpBpMSe1eslWPpMGV86qCsYluHUvMYEBEn-lqFdo'; // вставьте свой ключ
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGZzY3V5b2ZldnJ5d2ZidWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTA0NTIsImV4cCI6MjA2NzAyNjQ1Mn0.QQFwpBpMSe1eslWPpMGV86qCsYluHUvMYEBEn-lqFdo';
 
       // Получить максимум кликов пользователя
       async function getUserClicks(username) {
-        const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}`, {
+        const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}&select=clicks`, {
           headers: {
             'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${supabaseKey}`
           }
         });
         const data = await res.json();
-        return data.length > 0 ? data[0].clicks : 0;
+        return data[0]?.clicks || 0;
       }
 
       // Сохранить максимум кликов пользователя (upsert)
       async function saveUserClicks(username, clicks) {
-        // upsert (insert/update)
+        console.log("➡️ Сохраняем:", { username, clicks });
         const res = await fetch(`${supabaseUrl}/rest/v1/clicks`, {
           method: 'POST',
           headers: {
@@ -61,8 +60,9 @@
           },
           body: JSON.stringify([{ username, clicks }])
         });
-        if (!res.ok) throw new Error('Ошибка сохранения');
-        return await res.json();
+        const data = await res.json();
+        console.log("✅ Ответ от Supabase:", res.status, data);
+        return { success: res.ok, data };
       }
 
       // === Ссылки на проекты ===
@@ -2296,18 +2296,32 @@ Quest, only about quests тг (проходит набор раз в перио�
             if (!lapaclickerUser) return;
             if (lapaclickerCount > lapaclickerMax) {
                 try {
-                    await saveUserClicks(lapaclickerUser, lapaclickerCount);
-                    lapaclickerMax = lapaclickerCount;
-                    lapaclickerCount = 0;
-                    document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
-                    document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
-                } catch (e) {
-                    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.showAlert) {
-                        Telegram.WebApp.showAlert('Ошибка сохранения! Попробуйте ещё раз.');
+                    const result = await saveUserClicks(lapaclickerUser, lapaclickerCount);
+                    if (result.success) {
+                        lapaclickerMax = lapaclickerCount;
+                        lapaclickerCount = 0;
+                        document.getElementById('lapaclicker-max').textContent = lapaclickerMax;
+                        document.getElementById('lapaclicker-count').textContent = lapaclickerCount;
+                        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.showAlert) {
+                            Telegram.WebApp.showAlert('Результат сохранён!');
+                        } else {
+                            alert('Результат сохранён!');
+                        }
                     } else {
-                        alert('Ошибка сохранения! Попробуйте ещё раз.');
+                        if (window.Telegram && Telegram.WebApp && Telegram.WebApp.showAlert) {
+                            Telegram.WebApp.showAlert('Ошибка сохранения. Подробности в консоли.');
+                        } else {
+                            alert('Ошибка сохранения. Подробности в консоли.');
+                        }
+                        console.error('❌ Ошибка при сохранении:', result.data);
                     }
-                    // НЕ сбрасываем счётчик!
+                } catch (error) {
+                    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.showAlert) {
+                        Telegram.WebApp.showAlert('Ошибка сети. Повторите попытку.');
+                    } else {
+                        alert('Ошибка сети. Повторите попытку.');
+                    }
+                    console.error('🌐 Сетевая ошибка:', error);
                 }
             } else {
                 // Если результат не больше максимума — просто обновляем UI
@@ -2400,63 +2414,6 @@ Quest, only about quests тг (проходит набор раз в перио�
             };
         }
     </script>
-
-<script>
-const supabaseUrl = 'https://sqpfscuyofevrywfbubm.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxcGZzY3V5b2ZldnJ5d2ZidWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0NTA0NTIsImV4cCI6MjA2NzAyNjQ1Mn0.QQFwpBpMSe1eslWPpMGV86qCsYluHUvMYEBEn-lqFdo';
-
-async function saveUserClicks(username, clicks) {
-  console.log("➡️ Сохраняем:", { username, clicks });
-  const res = await fetch(`${supabaseUrl}/rest/v1/clicks`, {
-    method: 'POST',
-    headers: {
-      'apikey': supabaseKey,
-      'Authorization': `Bearer ${supabaseKey}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'resolution=merge-duplicates'
-    },
-    body: JSON.stringify([{ username, clicks }])
-  });
-  const data = await res.json();
-  console.log("✅ Ответ от Supabase:", res.status, data);
-  return { success: res.ok, data };
-}
-
-async function getUserClicks(username) {
-  const res = await fetch(`${supabaseUrl}/rest/v1/clicks?username=eq.${encodeURIComponent(username)}&select=clicks`, {
-    headers: {
-      'apikey': supabaseKey,
-      'Authorization': `Bearer ${supabaseKey}`
-    }
-  });
-  const data = await res.json();
-  return data[0]?.clicks || 0;
-}
-
-async function saveResult() {
-  if (!tg.initDataUnsafe?.user?.username) {
-    tg.showAlert('Ошибка: пользователь не найден');
-    return;
-  }
-  const username = tg.initDataUnsafe.user.username;
-  const clicks = currentClicks;
-
-  try {
-    const result = await saveUserClicks(username, clicks);
-    if (result.success) {
-      tg.showAlert('Результат сохранён!');
-      currentClicks = 0;
-      updateClickCount();
-    } else {
-      tg.showAlert('Ошибка сохранения. Подробности в консоли.');
-      console.error('❌ Ошибка при сохранении:', result.data);
-    }
-  } catch (error) {
-    tg.showAlert('Ошибка сети. Повторите попытку.');
-    console.error('🌐 Сетевая ошибка:', error);
-  }
-}
-</script>
 
 </body>
 </html>
