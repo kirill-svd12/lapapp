@@ -560,11 +560,8 @@
             opacity: 0.8;
         }
 
-        .main-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        #app .main-menu {
+            grid-template-columns: 1fr !important;
         }
 
         .main-menu .button {
@@ -1097,6 +1094,36 @@
         .lapaclicker-new-save:active {
           background: #ffd1e3;
         }
+
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        #initial-welcome .main-menu {
+            grid-template-columns: 1fr !important;
+        }
+
+        .button-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .main-hero-btn {
+            background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+            color: #4A4A4A;
+            border: 2px solid #fcb69f;
+            box-shadow: 0 8px 32px rgba(252, 182, 159, 0.15);
+            transition: background 0.3s, color 0.3s, border 0.3s;
+        }
+        .main-hero-btn:hover {
+            background: linear-gradient(90deg, #fcb69f 0%, #ffecd2 100%);
+            color: #d72660;
+            border-color: #ffb6c1;
+        }
     </style>
 </head>
 <body>
@@ -1113,7 +1140,7 @@
         <div class="modal-content">
             <div class="modal-icon">🤖</div>
             <div class="modal-title">Coming Soon!</div>
-            <div class="modal-text">Тематические промты для GPT находятся в разработке. Скоро здесь появятся полезные промты для работы с квестами!</div>
+            <div class="modal-text">Тематические промты для GPT находятся в разработке. Скоро здесь появятся полезные промты для работы с квестами!<br>Следите за обновлениями!</div>
             <button class="modal-button" onclick="closeGptModal()">Понятно</button>
         </div>
     </div>
@@ -1122,7 +1149,7 @@
     <div class="modal-overlay" id="news-modal">
         <div class="modal-content">
             <div class="modal-icon">📰</div>
-            <div class="modal-title">В разработке!</div>
+            <div class="modal-title">Coming Soon!</div>
             <div class="modal-text">Раздел новостей скоро появится для всех пользователей.<br>Следите за обновлениями!</div>
             <button class="modal-button" onclick="closeNewsModal()">Понятно</button>
         </div>
@@ -1133,9 +1160,9 @@
         <div id="initial-welcome" class="screen active">
             <div class="welcome-screen">
                 <h1 class="welcome-title">Добро пожаловать в QuestApp!</h1>
-                <p class="welcome-subtitle">Ваш проводник в мир квестов! Здесь вы найдете информацию о квестах, сможете посмотреть свои лапабаллы и многое другое.<br/>Чтобы посмотреть свои лапабаллы, перейдите в раздел "Интерактив".</p>
+                <p class="welcome-subtitle">Ваш проводник в мир квестов! Здесь вы найдете информацию о квестах, сможете посмотреть свои лапабаллы и многое другое.<br/>Чтобы посмотреть свои лапабаллы, перейдите в раздел "Главный герой".</p>
                 <div class="main-menu">
-                    <button class="button" onclick="showScreen('start')">
+                    <button class="button main-hero-btn" onclick="showScreen('start')">
                         <span class="emoji">🚀</span>
                         Начать
                     </button>
@@ -1149,10 +1176,6 @@
                 <h1 class="welcome-title">Главное меню</h1>
                 <p class="welcome-subtitle">Выберите интересующий раздел</p>
                 <div class="main-menu">
-                    <button class="button lapaclicker-main-btn" onclick="showLapaclicker()">
-                        <span class="emoji">🐾</span>
-                        ЛапаКликер
-                    </button>
                     <button class="button" onclick="showScreen('project-selection')">
                         <span class="emoji">🎯</span>
                         Подбор проекта
@@ -1169,9 +1192,9 @@
                         <span class="emoji">🎓</span>
                         Продвинутая информация
                     </button>
-                    <button class="button" onclick="showScreen('interactive')">
-                        <span class="emoji">🎮</span>
-                        Интерактив
+                    <button class="button main-hero-btn" onclick="showScreen('interactive')">
+                        <span class="emoji">🦸‍♂️</span>
+                        Главный герой
                     </button>
                     <button class="button" onclick="openNews()">
                         <span class="emoji">📰</span>
@@ -1224,91 +1247,107 @@
         <!-- Экшен игры -->
         <div id="action-games" class="screen">
             <div class="text-content">Да, их совсем немного!<br/>Если вам нравится экшен, есть возможность посетить версии других проектов, но в данном жанре:</div>
-            <a class="button" href="https://telegra.ph/Proekt-Stress-06-16" target="_blank">Проект стресс 18+</a>
-            <a class="button" href="https://telegra.ph/The-Last-of-Us-06-16-2" target="_blank">The last of us 18+</a>
-            <a class="button" href="https://telegra.ph/Pryatki-v-Alkatrase-06-16" target="_blank">Прятки в Алькатрасе 18+</a>
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Proekt-Stress-06-16" target="_blank">Проект стресс 18+</a>
+                <a class="button" href="https://telegra.ph/The-Last-of-Us-06-16-2" target="_blank">The last of us 18+</a>
+                <a class="button" href="https://telegra.ph/Pryatki-v-Alkatrase-06-16" target="_blank">Прятки в Алькатрасе 18+</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Иммерсивные проекты -->
         <div id="immersive" class="screen">
             <div class="text-content">Хороших иммерсивных проектов, к сожалению, также мало. И найти альтернативные версии в данном жанре будет значительно труднее</div>
-            <a class="button" href="https://telegra.ph/Podozrenie-padaet-na-05-23" target="_blank">Подозрение падает на 14+</a>
-            <a class="button" href="https://telegra.ph/Semejnyj-obet-05-23" target="_blank">Семейный обет 16+</a>
-            <a class="button" href="https://telegra.ph/Insane-Paranoid-06-16" target="_blank">Insane Paranoid 16+</a>
-            <a class="button" href="https://telegra.ph/Kto-ne-spryatalsya-06-16" target="_blank">Кто не спрятался 12+</a>
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Podozrenie-padaet-na-05-23" target="_blank">Подозрение падает на 14+</a>
+                <a class="button" href="https://telegra.ph/Semejnyj-obet-05-23" target="_blank">Семейный обет 16+</a>
+                <a class="button" href="https://telegra.ph/Insane-Paranoid-06-16" target="_blank">Insane Paranoid 16+</a>
+                <a class="button" href="https://telegra.ph/Kto-ne-spryatalsya-06-16" target="_blank">Кто не спрятался 12+</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Эскейпы -->
         <div id="escape" class="screen">
             <div class="text-content">А вот эскейпов уже значительно больше! Тут предоставлены лишь некоторые из них</div>
-            <button class="button" onclick="showScreen('more-difficult')"><span class="emoji">⬆️</span>Более сложные</button>
-            <button class="button" onclick="showScreen('less-difficult')"><span class="emoji">⬇️</span>Менее сложные</button>
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <button class="button" onclick="showScreen('more-difficult')"><span class="emoji">⬆️</span>Более сложные</button>
+                <button class="button" onclick="showScreen('less-difficult')"><span class="emoji">⬇️</span>Менее сложные</button>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Более сложные эскейпы -->
         <div id="more-difficult" class="screen">
             <div class="text-content">Более сложные эскейпы:</div>
-            <a class="button" href="https://telegra.ph/Obekt-Foris-06-16" target="_blank">Объект форис 16+</a>
-            <a class="button" href="https://telegra.ph/Mech-korolya-Artura-06-16-2" target="_blank">Меч короля Артура 14+(10+)
-            <a class="button" href="https://telegra.ph/Desyat-negrityat-06-16" target="_blank">10 негритят 14+</a>
-            <a class="button" href="https://telegra.ph/Vozdushnyj-plen-06-16" target="_blank">Воздушный плен 14+(10+)
-            <a class="button" href="https://telegra.ph/Vkus-nasledstva-06-16" target="_blank">Вкус наследства 14+(11+)
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Obekt-Foris-06-16" target="_blank">Объект форис 16+</a>
+                <a class="button" href="https://telegra.ph/Mech-korolya-Artura-06-16-2" target="_blank">Меч короля Артура 14+(10+)</a>
+                <a class="button" href="https://telegra.ph/Desyat-negrityat-06-16" target="_blank">10 негритят 14+</a>
+                <a class="button" href="https://telegra.ph/Vozdushnyj-plen-06-16" target="_blank">Воздушный плен 14+(10+)</a>
+                <a class="button" href="https://telegra.ph/Vkus-nasledstva-06-16" target="_blank">Вкус наследства 14+(11+)</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Менее сложные эскейпы -->
         <div id="less-difficult" class="screen">
             <div class="text-content">Менее сложные эскейпы:</div>
-            <a class="button" href="https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16" target="_blank">Назад в СССР: перегрузка 14+(12+)
-            <a class="button" href="https://telegra.ph/Na-oshchup-06-16" target="_blank">На ощупь 14+(12+)
-            <a class="button" href="https://telegra.ph/7-zagadok-faraona-06-16" target="_blank">7 загадок фараона 14+(10+)
-            <a class="button" href="https://telegra.ph/Lavina-zabveniya-06-16" target="_blank">Лавина забвения 14+(8+)
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Nazad-v-SSSR-perezagruzka-06-16" target="_blank">Назад в СССР: перегрузка 14+(12+)</a>
+                <a class="button" href="https://telegra.ph/Na-oshchup-06-16" target="_blank">На ощупь 14+(12+)</a>
+                <a class="button" href="https://telegra.ph/7-zagadok-faraona-06-16" target="_blank">7 загадок фараона 14+(10+)</a>
+                <a class="button" href="https://telegra.ph/Lavina-zabveniya-06-16" target="_blank">Лавина забвения 14+(8+)</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Маньячки -->
         <div id="maniac" class="screen">
             <div class="text-content">С ними, к сожалению, тоже беда. При желании есть возможность пройти альтернативные маньячные версии на других проектах (Дед инсайд, мгла и сидр как пример)</div>
-            <a class="button" href="https://telegra.ph/Povorot-ne-tuda-06-16" target="_blank">Поворот не туда 16+</a>
-            <a class="button" href="https://telegra.ph/Nezvanye-gosti-06-16" target="_blank">Незваные гости 12+</a>
-            <a class="button" href="https://telegra.ph/Proekt-Fatum-06-16" target="_blank">Проект Fatum 18+</a>
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Povorot-ne-tuda-06-16" target="_blank">Поворот не туда 16+</a>
+                <a class="button" href="https://telegra.ph/Nezvanye-gosti-06-16" target="_blank">Незваные гости 12+</a>
+                <a class="button" href="https://telegra.ph/Proekt-Fatum-06-16" target="_blank">Проект Fatum 18+</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Мистика -->
         <div id="mystic" class="screen">
             <div class="text-content">Проектов этого жанра огромное количество, на вкус и цвет</div>
-            <a class="button" href="https://telegra.ph/Nightmares-06-16" target="_blank">Nightmares 14+</a>
-            <a class="button" href="https://telegra.ph/The-Evil-Within-06-16" target="_blank">The Evil Within 16+</a>
-            <a class="button" href="https://telegra.ph/Outlast-06-16" target="_blank">Outlast 16+</a>
-            <a class="button" href="https://telegra.ph/Amnesia-06-16" target="_blank">Amnesia 16+</a>
-            <a class="button" href="https://telegra.ph/Fear-06-16" target="_blank">Fear 16+</a>
-            <a class="button" href="https://telegra.ph/Poltergejst-06-16" target="_blank">Полтергейст 16+</a>
-            <a class="button" href="https://telegra.ph/Five-Nights-at-Freddys-06-16-2" target="_blank">Five Nights at Freddy's 18+(12+)
-            <a class="button" href="https://telegra.ph/Pila-06-16" target="_blank">Пила 16+</a>
-            <a class="button" href="https://telegra.ph/Ono-06-16" target="_blank">Оно 16+</a>
-            <a class="button" href="https://telegra.ph/Babadook-06-16" target="_blank">Babadook 15+(12+)
-            <a class="button" href="https://telegra.ph/Mgla-06-16" target="_blank">Мгла 16+(12+)
-            <a class="button" href="https://telegra.ph/Taro-karta-smerti-06-16" target="_blank">Таро: карта смерти 18+(16+)
-            <a class="button" href="https://telegra.ph/Iskateli-mogil-06-16" target="_blank">Искатели могил 14+
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Nightmares-06-16" target="_blank">Nightmares 14+</a>
+                <a class="button" href="https://telegra.ph/The-Evil-Within-06-16" target="_blank">The Evil Within 16+</a>
+                <a class="button" href="https://telegra.ph/Outlast-06-16" target="_blank">Outlast 16+</a>
+                <a class="button" href="https://telegra.ph/Amnesia-06-16" target="_blank">Amnesia 16+</a>
+                <a class="button" href="https://telegra.ph/Fear-06-16" target="_blank">Fear 16+</a>
+                <a class="button" href="https://telegra.ph/Poltergejst-06-16" target="_blank">Полтергейст 16+</a>
+                <a class="button" href="https://telegra.ph/Five-Nights-at-Freddys-06-16-2" target="_blank">Five Nights at Freddy's 18+(12+)</a>
+                <a class="button" href="https://telegra.ph/Pila-06-16" target="_blank">Пила 16+</a>
+                <a class="button" href="https://telegra.ph/Ono-06-16" target="_blank">Оно 16+</a>
+                <a class="button" href="https://telegra.ph/Babadook-06-16" target="_blank">Babadook 15+(12+)</a>
+                <a class="button" href="https://telegra.ph/Mgla-06-16" target="_blank">Мгла 16+(12+)</a>
+                <a class="button" href="https://telegra.ph/Taro-karta-smerti-06-16" target="_blank">Таро: карта смерти 18+(16+)</a>
+                <a class="button" href="https://telegra.ph/Iskateli-mogil-06-16" target="_blank">Искатели могил 14+</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Смеси -->
         <div id="mixed" class="screen">
             <div class="text-content">Смеси включают в себя как элементы мистики, так и маньячки! Возможно наличие экшен-части</div>
-            <a class="button" href="https://telegra.ph/Lechebnica-sv-Avena-06-16" target="_blank">Авен 14+</a>
-            <a class="button" href="https://telegra.ph/Rage-06-16" target="_blank">Rage 16+</a>
-            <a class="button" href="https://telegra.ph/Momo-06-16" target="_blank">Момо 14+</a>
-            <a class="button" href="https://telegra.ph/Dead-Inside-06-16" target="_blank">Dead inside 12+</a>
-            <a class="button" href="https://telegra.ph/Amerikanskaya-istoriya-uzhasov-06-16" target="_blank">Американская история ужасов 12+</a>
-            <a class="button" href="https://telegra.ph/Strashnye-istorii-dlya-rasskazov-v-temnote-06-15" target="_blank">СИДР 12+</a>
-            <a class="button" href="https://telegra.ph/SCP-06-15" target="_blank">Scp 14+</a>
-            <a class="button" href="https://telegra.ph/Za-dengi---da-06-15" target="_blank">За деньги - да 14+(12+)
-            <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            <div class="button-list">
+                <a class="button" href="https://telegra.ph/Lechebnica-sv-Avena-06-16" target="_blank">Авен 14+</a>
+                <a class="button" href="https://telegra.ph/Rage-06-16" target="_blank">Rage 16+</a>
+                <a class="button" href="https://telegra.ph/Momo-06-16" target="_blank">Момо 14+</a>
+                <a class="button" href="https://telegra.ph/Dead-Inside-06-16" target="_blank">Dead inside 12+</a>
+                <a class="button" href="https://telegra.ph/Amerikanskaya-istoriya-uzhasov-06-16" target="_blank">Американская история ужасов 12+</a>
+                <a class="button" href="https://telegra.ph/Strashnye-istorii-dlya-rasskazov-v-temnote-06-15" target="_blank">СИДР 12+</a>
+                <a class="button" href="https://telegra.ph/SCP-06-15" target="_blank">Scp 14+</a>
+                <a class="button" href="https://telegra.ph/Za-dengi---da-06-15" target="_blank">За деньги - да 14+(12+)</a>
+                <button class="button back-button" onclick="goBack()"><span class="emoji">⬅️</span>Назад</button>
+            </div>
         </div>
 
         <!-- Базовая информация -->
@@ -1628,7 +1667,7 @@
 <a href="https://t.me/podvorotnya_quest" target="_blank">https://t.me/podvorotnya_quest</a>
 
 🦄 Долбаный космос (классные квизы, собирающие преимущественно квестовых ребят, отзывы, истории и просто уютная атмосфера)
-<a href="https://t.me/kosmosAlya" target="_blank">https://t.me/kosmosAlya</a>
+<a href="https://t.me/spaceunicornAlya" target="_blank">https://t.me/kosmosAlya</a>
 
 🤲🏻 Quest, only about quests (наборы на квесты, поиск сокомандников,акции и отзывы)
 <a href="https://t.me/ruslan_kvest2024" target="_blank">https://t.me/ruslan_kvest2024</a>
