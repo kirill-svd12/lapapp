@@ -1184,7 +1184,7 @@
 
     <!-- Модальное окно для GPT промтов -->
     <div class="modal-overlay" id="gpt-modal">
-        <div class="modal-content" style="position:relative;">
+        <div class="modal-content" style="position:relative; max-height:90vh; overflow-y:auto;">
             <button onclick="closeGptModal()" style="position:absolute;top:12px;right:16px;background:transparent;border:none;font-size:2em;line-height:1;color:#ff69b4;cursor:pointer;z-index:10;" aria-label="Закрыть">&times;</button>
             <div class="modal-icon">🤖</div>
             <div class="modal-title">Тематические промты для GPT</div>
